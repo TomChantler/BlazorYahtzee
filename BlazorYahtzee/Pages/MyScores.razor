@@ -1,0 +1,39 @@
+﻿@page "/my-scores"
+
+@using BlazorYahtzee.Models
+@using BlazorYahtzee.Services
+
+@inject IScoreService ScoreService
+
+<h3 class="mb-4">My Scores</h3>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="row"></th>
+            <th scope="col">Points</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Scores.Count(); i++)
+        {
+            var score = Scores.ElementAt(i);
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@score.Points</td>
+                <td>@score.TimeStamp</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private IEnumerable<Score> Scores { get; set; } = new List<Score>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var scores = await ScoreService.GetScoresAsync();
+        Scores = scores.OrderByDescending(x => x.Points).ToList();
+    }
+}

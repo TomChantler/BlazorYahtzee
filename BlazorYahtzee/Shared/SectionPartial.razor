@@ -1,0 +1,64 @@
+﻿@using BlazorYahtzee.Models
+@using BlazorYahtzee.Models.Categories
+
+<div class="row">
+    <div class="col-6 p-2 border">
+        @Category.Name
+    </div>
+    @if (Player.Plays.HasPlay(Category))
+    {
+        <div class="col-6 p-2 border text-right">
+            @Player.Plays.ScoreFor(Category)
+        </div>
+    }
+    else
+    {
+        <div class="col-6 p-1 border text-right">
+            @if (!IsRolling)
+            {
+                if (ShowBlueButton())
+                {
+                    <button type="button" class="btn btn-primary btn-sm px-3" @onclick="@(async () => await OnCategoryClaimed.InvokeAsync(Category))">@Category.PointsFor(Player)</button>
+                }
+                if (ShowWhiteButton())
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm px-3" @onclick="@(async () => await OnCategoryClaimed.InvokeAsync(Category))">@Category.PointsFor(Player)</button>
+                }
+            }
+            else
+            {
+                // TODO: Display the temporary points assigned to the category
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Player Player { get; set; }
+
+    [Parameter]
+    public ICategory Category { get; set; }
+
+    [Parameter]
+    public bool IsStartOfTurn { get; set; }
+
+    [Parameter]
+    public bool IsEndOfTurn { get; set; }
+
+    [Parameter]
+    public bool IsRolling { get; set; }
+
+    [Parameter]
+    public EventCallback<ICategory> OnCategoryClaimed { get; set; }
+
+    private bool ShowBlueButton()
+    {
+        return (!IsStartOfTurn || Player.HasForcedPlay) && Category.CanBeClaimedBy(Player);
+    }
+
+    private bool ShowWhiteButton()
+    {
+        return (IsEndOfTurn || Player.HasForcedPlay) && !Category.CanBeClaimedBy(Player);
+    }
+}

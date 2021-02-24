@@ -1,0 +1,40 @@
+﻿@inherits LayoutComponentBase
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow">
+        <div class="container">
+            <a class="navbar-brand" href="/">Blazor Yahtzee</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/my-scores" class="nav-link">My Scores</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main" class="py-4">
+    <div class="container">
+        @Body
+    </div>
+</main>
+
+<footer class="border-top text-muted small">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 my-4 text-center">
+                <a class="mr-2" href="https://github.com/lucabriguglia/BlazorYahtzee" title="Blazor Yahtzee by Luca Briguglia">Blazor Yahtzee by Luca Briguglia</a>
+                |
+                <a class="ml-2" href="http://www.yahtzee.org.uk/rules.html" title="View Yahtzee Rules" target="_blank">View Yahtzee Rules</a>
+            </div>
+        </div>
+    </div>
+</footer>

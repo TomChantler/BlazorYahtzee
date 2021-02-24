@@ -1,0 +1,16 @@
+﻿<div class="row">
+    <div class="col-6 p-2 font-weight-bold text-right">
+        @Text
+    </div>
+    <div class="col-6 p-2 font-weight-bold border text-right">
+        @Points
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public int Points { get; set; }
+}

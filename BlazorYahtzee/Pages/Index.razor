@@ -1,0 +1,214 @@
+﻿@page "/"
+
+@using BlazorYahtzee.Models
+@using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Services
+
+@inject ICategoryService CategoryService
+@inject IScoreService ScoreService
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            @foreach (var category in UpperSectionCategories())
+            {
+                <SectionPartial Player="Player"
+                                Category="category"
+                                IsStartOfTurn="IsStartOfTurn()"
+                                IsEndOfTurn="IsEndOfTurn()"
+                                IsRolling="IsRolling"
+                                OnCategoryClaimed="OnCategoryClaimed" />
+            }
+            <TotalPartial Text="Total" Points="@Player.Plays.ScoreForUpperSection()" />
+            <TotalPartial Text="Bonus" Points="@(Player.Plays.HasBonus() ? 35 : 0)" />
+            <TotalPartial Text="Upper Section" Points="@Player.Plays.ScoreForUpperSectionWithBonus()" />
+            @foreach (var category in LowerSectionCategories())
+            {
+                <SectionPartial Player="Player"
+                                Category="category"
+                                IsStartOfTurn="IsStartOfTurn()"
+                                IsEndOfTurn="IsEndOfTurn()"
+                                IsRolling="IsRolling"
+                                OnCategoryClaimed="OnCategoryClaimed" />
+            }
+            <div class="row">
+                <div class="col-6 p-2 font-weight-bold text-right">
+                    Yahtzee Bonus
+                </div>
+                <div class="col-6 p-2 font-weight-bold border text-right">
+                    @if (Player.Plays.HasMultipleYahtzeePlays())
+                    {
+                        @Player.Plays.ScoreForYahtzeeBonus() <span class="text-secondary">(100 x @(Player.Plays.NumberOfYahtzeePlays() - 1) additional Yahtzees)</span>
+                    }
+                    else
+                    {
+                        <text>0</text>
+                    }
+                    @if (Player.Dice.HasYahtzee() && Player.Plays.HasYahtzeePlayForBonus() && !Player.HasForcedPlay && !IsStartOfTurn())
+                    {
+                        <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(() => ClaimYahtzeeBonusPlay())">Claim</button>
+                    }
+                </div>
+            </div>
+            <TotalPartial Text="Lower Section" Points="@Player.Plays.ScoreForLowerSection()" />
+            <TotalPartial Text="Upper Section" Points="@Player.Plays.ScoreForUpperSectionWithBonus()" />
+            <TotalPartial Text="Grand Total" Points="@Player.Plays.TotalScore()" />
+        </div>
+        <div class="col-3 text-center">
+            @foreach (var die in Player.Dice.Collection)
+            {
+                <DiePartial Die="die" IsStartOfTurn="IsStartOfTurn()" />
+            }
+            <div class="row mt-3 mb-4">
+                <div class="col">
+                    @if (!IsEndOfTurn() && !IsGameOver())
+                    {
+                        if (IsRolling)
+                        {
+                            <button class="btn btn-primary disabled">Roll</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
+                        }
+                    }
+                    else if (IsGameOver())
+                    {
+                        <div class="font-weight-bold">Game Over</div>
+                        <div>Final score: @Player.Plays.TotalScore()</div>
+                        <div class="mt-2">
+                            <button class="btn btn-success" @onclick="@(() => NewGame())">New Game</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary disabled">Roll</button>
+                        <div class="mt-4">
+                            @if (Player.HasForcedPlay)
+                            {
+                                <span>A score must be marked after claiming a Yahtzee bonus.</span>
+                            }
+                            else
+                            {
+                                <span>Please, claim a play.</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="mb-2 text-center">
+                <div>Rolls</div>
+                <div class="font-weight-bold">@(IsGameOver() ? 3 : 3-RollsRemaining)/3</div>
+            </div>
+            <div class="mb-3 text-center">
+                <div>Turns</div>
+                <div class="font-weight-bold">@(IsGameOver() ? 13 : 13-TurnsRemaining+1)/13</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private Player Player { get; set; }
+
+    private IEnumerable<ICategory> Categories { get; set; } = new List<ICategory>();
+
+    private IEnumerable<ICategory> UpperSectionCategories() => Categories.Where(x => x.Section == SectionType.Upper);
+    private IEnumerable<ICategory> LowerSectionCategories() => Categories.Where(x => x.Section == SectionType.Lower);
+
+    public int TurnsRemaining { get; set; } = 13;
+    private int RollsRemaining { get; set; } = 3;
+
+    private bool IsRolling { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await CategoryService.GetCategoriesAsync();
+        NewGame();
+    }
+
+    private void NewGame()
+    {
+        Player = new Player();
+        TurnsRemaining = 13;
+        RollsRemaining = 3;
+    }
+
+    private bool IsStartOfTurn()
+    {
+        return RollsRemaining == 3;
+    }
+
+    private bool IsEndOfTurn()
+    {
+        return RollsRemaining == 0;
+    }
+
+    private bool IsGameOver()
+    {
+        return TurnsRemaining == 0;
+    }
+
+    private async Task RollDice()
+    {
+        IsRolling = true;
+        RollsRemaining--;
+
+        var random = new Random();
+
+        foreach (var die in Player.Dice.NotHeldCollection)
+        {
+            die.Roll();
+        }
+
+        foreach (var die in Player.Dice.NotHeldCollection)
+        {
+            await Task.Delay(200);
+            die.AssignValue(random.Next(1, 7));
+            die.Stop();
+            StateHasChanged();
+        }
+
+        if (IsEndOfTurn())
+        {
+            foreach (var die in Player.Dice.NotHeldCollection)
+            {
+                die.Hold();
+            }
+        }
+
+        IsRolling = false;
+    }
+
+    private async Task ClaimPlay(ICategory category)
+    {
+        Player.Plays.Add(category, category.PointsFor(Player));
+        await NextTurn();
+    }
+
+    private void ClaimYahtzeeBonusPlay()
+    {
+        var yahtzee = new Yahtzee();
+        Player.Plays.Add(yahtzee, yahtzee.PointsFor(Player));
+        Player.ForcePlay();
+        RollsRemaining = 0;
+    }
+
+    private async Task NextTurn()
+    {
+        TurnsRemaining--;
+        RollsRemaining = 3;
+        Player.ResetTurn();
+
+        if (IsGameOver())
+        {
+            await ScoreService.AddScoreAsync(Player);
+        }
+    }
+
+    public async Task OnCategoryClaimed(ICategory category)
+    {
+        await ClaimPlay(category);
+    }
+}
