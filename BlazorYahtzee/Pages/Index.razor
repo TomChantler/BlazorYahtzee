@@ -19,9 +19,9 @@
                                 IsRolling="IsRolling"
                                 OnCategoryClaimed="OnCategoryClaimed" />
             }
-            <TotalPartial Text="Total" Points="@Player.Plays.ScoreForUpperSection()" />
-            <TotalPartial Text="Bonus" Points="@(Player.Plays.HasBonus() ? 35 : 0)" />
-            <TotalPartial Text="Upper Section" Points="@Player.Plays.ScoreForUpperSectionWithBonus()" />
+            <TotalPartial Text="Total" Points="@Player.Plays(ColumnType.Free).ScoreForUpperSection()" />
+            <TotalPartial Text="Bonus" Points="@(Player.Plays(ColumnType.Free).HasBonus() ? 35 : 0)" />
+            <TotalPartial Text="Upper Section" Points="@Player.Plays(ColumnType.Free).ScoreForUpperSectionWithBonus()" />
             @foreach (var category in LowerSectionCategories())
             {
                 <SectionPartial Player="Player"
@@ -35,9 +35,9 @@
                                  IsStartOfTurn="IsStartOfTurn()" 
                                  IsRolling="IsRolling" 
                                  OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed"/>
-            <TotalPartial Text="Lower Section" Points="@Player.Plays.ScoreForLowerSection()" />
-            <TotalPartial Text="Upper Section" Points="@Player.Plays.ScoreForUpperSectionWithBonus()" />
-            <TotalPartial Text="Grand Total" Points="@Player.Plays.TotalScore()" />
+            <TotalPartial Text="Lower Section" Points="@Player.Plays(ColumnType.Free).ScoreForLowerSection()" />
+            <TotalPartial Text="Upper Section" Points="@Player.Plays(ColumnType.Free).ScoreForUpperSectionWithBonus()" />
+            <TotalPartial Text="Grand Total" Points="@Player.Plays(ColumnType.Free).TotalScore()" />
         </div>
         <div class="col-3 text-center">
             @foreach (var die in Player.Dice.Collection)
@@ -60,7 +60,7 @@
                     else if (IsGameOver())
                     {
                         <div class="font-weight-bold">Game Over</div>
-                        <div>Final score: @Player.Plays.TotalScore()</div>
+                        <div>Final score: @Player.Plays(ColumnType.Free).TotalScore()</div>
                         <div class="mt-2">
                             <button class="btn btn-success" @onclick="@(() => NewGame())">New Game</button>
                         </div>
@@ -180,7 +180,7 @@
 
     public async Task OnCategoryClaimed(ICategory category)
     {
-        Player.Plays.Add(category, category.PointsFor(Player));
+        Player.Plays(ColumnType.Free).Add(category, category.PointsFor(Player));
         await NextTurn();
     }
 
@@ -188,7 +188,7 @@
     {
         await Task.CompletedTask;
         var yahtzee = new Yahtzee();
-        Player.Plays.Add(yahtzee, yahtzee.PointsFor(Player));
+        Player.Plays(ColumnType.Free).Add(yahtzee, yahtzee.PointsFor(Player));
         Player.ForcePlay();
         RollsRemaining = 0;
     }

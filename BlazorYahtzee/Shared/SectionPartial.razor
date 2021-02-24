@@ -5,10 +5,10 @@
     <div class="col-6 p-2 border">
         @Category.Name
     </div>
-    @if (Player.Plays.HasPlay(Category))
+    @if (Player.Plays(ColumnType.Free).HasPlay(Category))
     {
         <div class="col-6 p-2 border text-right">
-            @Player.Plays.ScoreFor(Category)
+            @Player.Plays(ColumnType.Free).ScoreFor(Category)
         </div>
     }
     else

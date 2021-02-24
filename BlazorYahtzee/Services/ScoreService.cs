@@ -20,7 +20,7 @@ namespace BlazorYahtzee.Services
             var data = await _localStorageService.GetScoresAsync();
 
             var scores = data.ToList();
-            scores.Add(new Score(player.Plays.TotalScore()));
+            scores.Add(new Score(player.Plays(ColumnType.Free).TotalScore()));
 
             await _localStorageService.AddScoresAsync(scores);
         }

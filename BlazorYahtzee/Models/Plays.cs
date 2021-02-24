@@ -8,8 +8,15 @@ namespace BlazorYahtzee.Models
     {
         private readonly List<Play> _collection = new List<Play>();
 
+        public ColumnType Type { get; }
+
         private const int UpperSectionBonus = 35;
         private const int UpperSectionBonusThreshold = 63;
+
+        public Plays(ColumnType type)
+        {
+            Type = type;
+        }
 
         public void Add(ICategory category, int points)
         {

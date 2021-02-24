@@ -4,15 +4,15 @@
         Yahtzee Bonus
     </div>
     <div class="col-6 p-2 font-weight-bold border text-right">
-        @if (Player.Plays.HasMultipleYahtzeePlays())
+        @if (Player.Plays(ColumnType.Free).HasMultipleYahtzeePlays())
         {
-            @Player.Plays.ScoreForYahtzeeBonus()
+            @Player.Plays(ColumnType.Free).ScoreForYahtzeeBonus()
         }
         else
         {
             <text>0</text>
         }
-        @if (Player.Dice.HasYahtzee() && Player.Plays.HasYahtzeePlayForBonus() && !Player.HasForcedPlay && !IsStartOfTurn && !IsRolling)
+        @if (Player.Dice.HasYahtzee() && Player.Plays(ColumnType.Free).HasYahtzeePlayForBonus() && !Player.HasForcedPlay && !IsStartOfTurn && !IsRolling)
         {
             <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(async () => await OnYahtzeeBonusClaimed.InvokeAsync())">+ 100</button>
         }

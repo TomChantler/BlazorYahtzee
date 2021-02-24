@@ -1,12 +1,23 @@
-﻿namespace BlazorYahtzee.Models
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace BlazorYahtzee.Models
 {
     public class Player
     {
         public Dice Dice { get; } = new Dice();
-        public Plays Plays { get; } = new Plays();
+
+        private readonly IList<Plays> _plays = new List<Plays>();
 
         public bool HasForcedPlay { get; private set; }
 
+        public Player()
+        {
+            _plays.Add(new Plays(ColumnType.Free));
+        }
+
+        public Plays Plays(ColumnType type) => _plays.Single(x => x.Type == type);
+        
         public void ForcePlay()
         {
             HasForcedPlay = true;
