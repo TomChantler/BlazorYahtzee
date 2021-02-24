@@ -1,0 +1,34 @@
+﻿@using BlazorYahtzee.Models
+<div class="row">
+    <div class="col-6 p-2 font-weight-bold text-right">
+        Yahtzee Bonus
+    </div>
+    <div class="col-6 p-2 font-weight-bold border text-right">
+        @if (Player.Plays.HasMultipleYahtzeePlays())
+        {
+            @Player.Plays.ScoreForYahtzeeBonus()
+        }
+        else
+        {
+            <text>0</text>
+        }
+        @if (Player.Dice.HasYahtzee() && Player.Plays.HasYahtzeePlayForBonus() && !Player.HasForcedPlay && !IsStartOfTurn && !IsRolling)
+        {
+            <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(async () => await OnYahtzeeBonusClaimed.InvokeAsync())">+ 100</button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Player Player { get; set; }
+
+    [Parameter]
+    public bool IsStartOfTurn { get; set; }
+
+    [Parameter]
+    public bool IsRolling { get; set; }
+
+    [Parameter]
+    public EventCallback OnYahtzeeBonusClaimed { get; set; }
+}

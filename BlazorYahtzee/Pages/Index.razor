@@ -31,25 +31,10 @@
                                 IsRolling="IsRolling"
                                 OnCategoryClaimed="OnCategoryClaimed" />
             }
-            <div class="row">
-                <div class="col-6 p-2 font-weight-bold text-right">
-                    Yahtzee Bonus
-                </div>
-                <div class="col-6 p-2 font-weight-bold border text-right">
-                    @if (Player.Plays.HasMultipleYahtzeePlays())
-                    {
-                        @Player.Plays.ScoreForYahtzeeBonus() <span class="text-secondary">(100 x @(Player.Plays.NumberOfYahtzeePlays() - 1) additional Yahtzees)</span>
-                    }
-                    else
-                    {
-                        <text>0</text>
-                    }
-                    @if (Player.Dice.HasYahtzee() && Player.Plays.HasYahtzeePlayForBonus() && !Player.HasForcedPlay && !IsStartOfTurn())
-                    {
-                        <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(() => ClaimYahtzeeBonusPlay())">Claim</button>
-                    }
-                </div>
-            </div>
+            <YahtzeeBonusPartial Player="@Player" 
+                                 IsStartOfTurn="IsStartOfTurn()" 
+                                 IsRolling="IsRolling" 
+                                 OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed"/>
             <TotalPartial Text="Lower Section" Points="@Player.Plays.ScoreForLowerSection()" />
             <TotalPartial Text="Upper Section" Points="@Player.Plays.ScoreForUpperSectionWithBonus()" />
             <TotalPartial Text="Grand Total" Points="@Player.Plays.TotalScore()" />
@@ -181,20 +166,6 @@
         IsRolling = false;
     }
 
-    private async Task ClaimPlay(ICategory category)
-    {
-        Player.Plays.Add(category, category.PointsFor(Player));
-        await NextTurn();
-    }
-
-    private void ClaimYahtzeeBonusPlay()
-    {
-        var yahtzee = new Yahtzee();
-        Player.Plays.Add(yahtzee, yahtzee.PointsFor(Player));
-        Player.ForcePlay();
-        RollsRemaining = 0;
-    }
-
     private async Task NextTurn()
     {
         TurnsRemaining--;
@@ -209,6 +180,16 @@
 
     public async Task OnCategoryClaimed(ICategory category)
     {
-        await ClaimPlay(category);
+        Player.Plays.Add(category, category.PointsFor(Player));
+        await NextTurn();
+    }
+
+    public async Task OnYahtzeeBonusClaimed()
+    {
+        await Task.CompletedTask;
+        var yahtzee = new Yahtzee();
+        Player.Plays.Add(yahtzee, yahtzee.PointsFor(Player));
+        Player.ForcePlay();
+        RollsRemaining = 0;
     }
 }
