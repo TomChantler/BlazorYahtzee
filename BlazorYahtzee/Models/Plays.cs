@@ -84,7 +84,7 @@ namespace BlazorYahtzee.Models
         {
             var lowerSectionPointsExcludingYahtzee = _collection.Where(x =>
                     x.Category.Section == SectionType.Lower &&
-                    !x.Category.GetType().IsAssignableFrom(typeof(Categories.Yahtzee)))
+                    !x.Category.GetType().IsAssignableFrom(typeof(Yahtzee)))
                 .Sum(x => x.Points);
 
             return lowerSectionPointsExcludingYahtzee + ScoreForYahtzee() + ScoreForYahtzeeBonus();
