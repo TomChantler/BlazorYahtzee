@@ -32,5 +32,10 @@ namespace BlazorYahtzee.Models
             Dice.Release();
             HasForcedPlay = false;
         }
+
+        public int TotalScore()
+        {
+            return _plays.Sum(x => x.TotalScore());
+        }
     }
 }

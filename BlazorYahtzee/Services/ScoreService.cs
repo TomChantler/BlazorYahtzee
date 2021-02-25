@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorYahtzee.Data;
 using BlazorYahtzee.Models;
-using BlazorYahtzee.Models.Columns;
 
 namespace BlazorYahtzee.Services
 {
@@ -21,7 +20,7 @@ namespace BlazorYahtzee.Services
             var data = await _localStorageService.GetScoresAsync();
 
             var scores = data.ToList();
-            scores.Add(new Score(player.Plays(ColumnType.Free).TotalScore()));
+            scores.Add(new Score(player.TotalScore()));
 
             await _localStorageService.AddScoresAsync(scores);
         }

@@ -2,7 +2,6 @@
 
 @using BlazorYahtzee.Models
 @using BlazorYahtzee.Models.Categories
-@using BlazorYahtzee.Models.Columns
 @using BlazorYahtzee.Models.Modes
 @using BlazorYahtzee.Services
 
@@ -63,7 +62,7 @@
                     else if (IsGameOver())
                     {
                         <div class="font-weight-bold">Game Over</div>
-                        <div>Final score: @Player.Plays(ColumnType.Free).TotalScore()</div>
+                        <div>Final score: @Player.TotalScore()</div>
                         <div class="mt-2">
                             <button class="btn btn-success" @onclick="@(() => NewGame())">New Game</button>
                         </div>
@@ -86,11 +85,11 @@
             </div>
             <div class="mb-2 text-center">
                 <div>Rolls</div>
-                <div class="font-weight-bold">@(IsGameOver() ? 3 : 3-RollsRemaining)/3</div>
+                <div class="font-weight-bold">@CurrentRoll()/3</div>
             </div>
             <div class="mb-3 text-center">
                 <div>Turns</div>
-                <div class="font-weight-bold">@(IsGameOver() ? 13 : 13-Game.TurnsRemaining+1)/13</div>
+                <div class="font-weight-bold">@CurrentTurn()/@Game.Mode.NumberOfTurns</div>
             </div>
         </div>
     </div>
@@ -167,6 +166,16 @@
         }
 
         IsRolling = false;
+    }
+
+    private int CurrentRoll()
+    {
+        return IsGameOver() ? 3 : 3 - RollsRemaining;
+    }
+
+    private int CurrentTurn()
+    {
+        return IsGameOver() ? Game.Mode.NumberOfTurns : Game.Mode.NumberOfTurns - Game.TurnsRemaining + 1;
     }
 
     private async Task NextTurn()
