@@ -6,7 +6,7 @@ namespace BlazorYahtzee.Services
 {
     public interface IScoreService
     {
-        Task AddScoreAsync(Player player);
+        Task AddScoreAsync(Game game);
         Task<IEnumerable<Score>> GetScoresAsync();
     }
 }

@@ -15,12 +15,12 @@ namespace BlazorYahtzee.Services
             _localStorageService = localStorageService;
         }
 
-        public async Task AddScoreAsync(Player player)
+        public async Task AddScoreAsync(Game game)
         {
             var data = await _localStorageService.GetScoresAsync();
 
             var scores = data.ToList();
-            scores.Add(new Score(player.TotalScore()));
+            scores.Add(new Score(game.Player.TotalScore()));
 
             await _localStorageService.AddScoresAsync(scores);
         }

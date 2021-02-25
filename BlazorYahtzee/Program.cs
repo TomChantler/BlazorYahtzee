@@ -17,7 +17,6 @@ namespace BlazorYahtzee
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IScoreService, ScoreService>();
             builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 

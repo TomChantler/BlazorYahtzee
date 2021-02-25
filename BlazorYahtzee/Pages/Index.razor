@@ -5,93 +5,117 @@
 @using BlazorYahtzee.Models.Modes
 @using BlazorYahtzee.Services
 
-@inject ICategoryService CategoryService
 @inject IScoreService ScoreService
 
 <div class="container">
     <div class="row">
-        <div class="col-9">
-            <HeaderFooterPartial Mode="Game.Mode" />
-            @foreach (var category in UpperSectionCategories())
-            {
-                <SectionPartial Mode="Game.Mode"
-                                Player="Player"
-                                Category="category"
-                                IsStartOfTurn="IsStartOfTurn()"
-                                IsEndOfTurn="IsEndOfTurn()"
-                                IsRolling="IsRolling"
-                                OnCategoryClaimed="OnCategoryClaimed" />
-            }
-            <UpperSectionTotalPartial Mode="Game.Mode" Player="Player" />
-            @foreach (var category in LowerSectionCategories())
-            {
-                <SectionPartial Mode="Game.Mode"
-                                Player="Player"
-                                Category="category"
-                                IsStartOfTurn="IsStartOfTurn()"
-                                IsEndOfTurn="IsEndOfTurn()"
-                                IsRolling="IsRolling"
-                                OnCategoryClaimed="OnCategoryClaimed" />
-            }
-            <YahtzeeBonusPartial Mode="Game.Mode"
-                                 Player="@Player"
-                                 IsStartOfTurn="IsStartOfTurn()"
-                                 IsRolling="IsRolling"
-                                 OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
-            <LowerSectionTotalPartial Mode="Game.Mode" Player="Player" />
-            <HeaderFooterPartial Mode="Game.Mode" />
-        </div>
-        <div class="col-3 text-center">
-            @foreach (var die in Player.Dice.Collection)
-            {
-                <DiePartial Die="die" IsStartOfTurn="IsStartOfTurn()" />
-            }
-            <div class="row mt-3 mb-4">
-                <div class="col">
-                    @if (!IsEndOfTurn() && !IsGameOver())
-                    {
-                        if (IsRolling)
+
+        @if (Game == null)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Yahtzee</h5>
+                        <p class="card-text">Standard Yahtzee game with 13 turns in total.</p>
+                        <button class="btn btn-primary" @onclick="@(() => NewGame(ModeType.Standard))">Yahtzee</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Yahtzee Plus</h5>
+                        <p class="card-text">Enhanced Yahtzee game with 4 columns and 60 turns in total.</p>
+                        <button class="btn btn-primary" @onclick="@(() => NewGame(ModeType.Plus))">Yahtzee Plus</button>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-9">
+                <HeaderFooterPartial Mode="Game.Mode" />
+                @foreach (var category in UpperSectionCategories())
+                {
+                    <SectionPartial Mode="Game.Mode"
+                                    Player="Player"
+                                    Category="category"
+                                    IsStartOfTurn="IsStartOfTurn()"
+                                    IsEndOfTurn="IsEndOfTurn()"
+                                    IsRolling="IsRolling"
+                                    OnCategoryClaimed="OnCategoryClaimed" />
+                }
+                <UpperSectionTotalPartial Mode="Game.Mode" Player="Player" />
+                @foreach (var category in LowerSectionCategories())
+                {
+                    <SectionPartial Mode="Game.Mode"
+                                    Player="Player"
+                                    Category="category"
+                                    IsStartOfTurn="IsStartOfTurn()"
+                                    IsEndOfTurn="IsEndOfTurn()"
+                                    IsRolling="IsRolling"
+                                    OnCategoryClaimed="OnCategoryClaimed" />
+                }
+                <YahtzeeBonusPartial Mode="Game.Mode"
+                                     Player="@Player"
+                                     IsStartOfTurn="IsStartOfTurn()"
+                                     IsRolling="IsRolling"
+                                     OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
+                <LowerSectionTotalPartial Mode="Game.Mode" Player="Player" />
+                <HeaderFooterPartial Mode="Game.Mode" />
+            </div>
+            <div class="col-3 text-center">
+                @foreach (var die in Player.Dice.Collection)
+                {
+                    <DiePartial Die="die" IsStartOfTurn="IsStartOfTurn()" />
+                }
+                <div class="row mt-3 mb-4">
+                    <div class="col">
+                        @if (!IsEndOfTurn() && !IsGameOver())
                         {
-                            <button class="btn btn-primary disabled">Roll</button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
-                        }
-                    }
-                    else if (IsGameOver())
-                    {
-                        <div class="font-weight-bold">Game Over</div>
-                        <div>Final score: @Player.TotalScore()</div>
-                        <div class="mt-2">
-                            <button class="btn btn-success" @onclick="@(() => NewGame())">New Game</button>
-                        </div>
-                    }
-                    else
-                    {
-                        <button class="btn btn-primary disabled">Roll</button>
-                        <div class="mt-4">
-                            @if (Player.HasForcedPlay)
+                            if (IsRolling)
                             {
-                                <span>A score must be marked after claiming a Yahtzee bonus.</span>
+                                <button class="btn btn-primary disabled">Roll</button>
                             }
                             else
                             {
-                                <span>Please, claim a play.</span>
+                                <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
                             }
-                        </div>
-                    }
+                        }
+                        else if (IsGameOver())
+                        {
+                            <div class="font-weight-bold">Game Over</div>
+                            <div>Final score: @Player.TotalScore()</div>
+                            <div class="mt-2">
+                                <button class="btn btn-success" @onclick="@(() => Game = null)">New Game</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary disabled">Roll</button>
+                            <div class="mt-4">
+                                @if (Player.HasForcedPlay)
+                                {
+                                    <span>A score must be marked after claiming a Yahtzee bonus.</span>
+                                }
+                                else
+                                {
+                                    <span>Please, claim a play.</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="mb-2 text-center">
+                    <div>Rolls</div>
+                    <div class="font-weight-bold">@CurrentRoll()/3</div>
+                </div>
+                <div class="mb-3 text-center">
+                    <div>Turns</div>
+                    <div class="font-weight-bold">@CurrentTurn()/@Game.Mode.NumberOfTurns</div>
                 </div>
             </div>
-            <div class="mb-2 text-center">
-                <div>Rolls</div>
-                <div class="font-weight-bold">@CurrentRoll()/3</div>
-            </div>
-            <div class="mb-3 text-center">
-                <div>Turns</div>
-                <div class="font-weight-bold">@CurrentTurn()/@Game.Mode.NumberOfTurns</div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -111,12 +135,11 @@
 
     protected override void OnInitialized()
     {
-        NewGame();
     }
 
-    private void NewGame()
+    private void NewGame(ModeType modeType)
     {
-        Game = new Game(ModeType.Standard);
+        Game = new Game(modeType);
         Categories = Game.Mode.Categories;
         Player = Game.Player;
         RollsRemaining = 3;
@@ -186,7 +209,7 @@
 
         if (IsGameOver())
         {
-            await ScoreService.AddScoreAsync(Player);
+            await ScoreService.AddScoreAsync(Game);
         }
     }
 
