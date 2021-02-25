@@ -4,7 +4,8 @@
     {
         string Name { get; }
         SectionType Section { get; }
-        bool CanBeClaimedBy(Player player);
+        bool CanBePlayed(Player player, ColumnType type);
+        bool CanBeClaimedInFull(Player player);
         int PointsFor(Player player);
     }
 }

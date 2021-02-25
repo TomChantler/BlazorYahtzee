@@ -2,6 +2,7 @@
 
 @using BlazorYahtzee.Models
 @using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Modes
 @using BlazorYahtzee.Services
 
 @inject ICategoryService CategoryService
@@ -87,7 +88,7 @@
             </div>
             <div class="mb-3 text-center">
                 <div>Turns</div>
-                <div class="font-weight-bold">@(IsGameOver() ? 13 : 13-TurnsRemaining+1)/13</div>
+                <div class="font-weight-bold">@(IsGameOver() ? 13 : 13-Game.TurnsRemaining+1)/13</div>
             </div>
         </div>
     </div>
@@ -95,6 +96,7 @@
 
 @code
 {
+    public Game Game { get; set; }
     private Player Player { get; set; }
 
     private IEnumerable<ICategory> Categories { get; set; } = new List<ICategory>();
@@ -102,21 +104,20 @@
     private IEnumerable<ICategory> UpperSectionCategories() => Categories.Where(x => x.Section == SectionType.Upper);
     private IEnumerable<ICategory> LowerSectionCategories() => Categories.Where(x => x.Section == SectionType.Lower);
 
-    public int TurnsRemaining { get; set; } = 13;
     private int RollsRemaining { get; set; } = 3;
 
     private bool IsRolling { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Categories = await CategoryService.GetCategoriesAsync();
         NewGame();
     }
 
     private void NewGame()
     {
-        Player = new Player();
-        TurnsRemaining = 13;
+        Game = new Game(ModeType.Standard);
+        Categories = Game.Mode.Categories;
+        Player = Game.Player;
         RollsRemaining = 3;
     }
 
@@ -132,7 +133,7 @@
 
     private bool IsGameOver()
     {
-        return TurnsRemaining == 0;
+        return Game.TurnsRemaining == 0;
     }
 
     private async Task RollDice()
@@ -168,7 +169,7 @@
 
     private async Task NextTurn()
     {
-        TurnsRemaining--;
+        Game.TurnsRemaining--;
         RollsRemaining = 3;
         Player.ResetTurn();
 

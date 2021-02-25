@@ -5,7 +5,17 @@
         public string Name { get; } = "Aces";
         public SectionType Section { get; } = SectionType.Upper;
 
-        public bool CanBeClaimedBy(Player player)
+        public bool CanBePlayed(Player player, ColumnType type)
+        {
+            return type switch
+            {
+                ColumnType.Down => true,
+                ColumnType.Up => player.Plays(ColumnType.Up).HasPlay(typeof(Twos)),
+                _ => true
+            };
+        }
+
+        public bool CanBeClaimedInFull(Player player)
         {
             return player.Dice.HasThreeOfAKind(1);
         }

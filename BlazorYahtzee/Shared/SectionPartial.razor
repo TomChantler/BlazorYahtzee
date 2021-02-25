@@ -54,11 +54,11 @@
 
     private bool ShowBlueButton()
     {
-        return (!IsStartOfTurn || Player.HasForcedPlay) && Category.CanBeClaimedBy(Player);
+        return (!IsStartOfTurn || Player.HasForcedPlay) && Category.CanBeClaimedInFull(Player);
     }
 
     private bool ShowWhiteButton()
     {
-        return (IsEndOfTurn || Player.HasForcedPlay) && !Category.CanBeClaimedBy(Player);
+        return (IsEndOfTurn || Player.HasForcedPlay) && !Category.CanBeClaimedInFull(Player);
     }
 }

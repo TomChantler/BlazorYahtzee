@@ -5,7 +5,17 @@
         public string Name { get; } = "Full House";
         public SectionType Section { get; } = SectionType.Lower;
 
-        public bool CanBeClaimedBy(Player player)
+        public bool CanBePlayed(Player player, ColumnType type)
+        {
+            return type switch
+            {
+                ColumnType.Down => player.Plays(ColumnType.Down).HasPlay(typeof(FourOfAKind)),
+                ColumnType.Up => player.Plays(ColumnType.Up).HasPlay(typeof(SmallStraight)),
+                _ => true
+            };
+        }
+
+        public bool CanBeClaimedInFull(Player player)
         {
             return player.Dice.HasFullHouse();
         }

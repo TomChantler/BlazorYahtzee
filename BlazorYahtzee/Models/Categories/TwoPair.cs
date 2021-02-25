@@ -1,28 +1,28 @@
 ﻿namespace BlazorYahtzee.Models.Categories
 {
-    public class Yahtzee : ICategory
+    public class TwoPair : ICategory
     {
-        public string Name { get; } = "Yahtzee";
+        public string Name { get; } = "Two Pair";
         public SectionType Section { get; } = SectionType.Lower;
 
         public bool CanBePlayed(Player player, ColumnType type)
         {
             return type switch
             {
-                ColumnType.Down => player.Plays(ColumnType.Down).HasPlay(typeof(LargeStraight)),
-                ColumnType.Up => player.Plays(ColumnType.Up).HasPlay(typeof(Chance)),
+                ColumnType.Down => player.Plays(ColumnType.Down).HasPlay(typeof(Pair)),
+                ColumnType.Up => player.Plays(ColumnType.Up).HasPlay(typeof(ThreeOfAKind)),
                 _ => true
             };
         }
 
         public bool CanBeClaimedInFull(Player player)
         {
-            return player.Dice.HasYahtzee();
+            return player.Dice.HasTwoPair();
         }
 
         public int PointsFor(Player player)
         {
-            return player.Dice.HasYahtzee() ? 50 : 0;
+            return player.Dice.SumOfTwoPair();
         }
     }
 }

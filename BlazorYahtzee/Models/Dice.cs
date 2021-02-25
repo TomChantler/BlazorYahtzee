@@ -28,6 +28,11 @@ namespace BlazorYahtzee.Models
             }
         }
 
+        public bool HasPairOf(int value)
+        {
+            return _collection.Count(x => x.Value == value) >= 2;
+        }
+
         public bool HasThreeOfAKind(int value)
         {
             return _collection.Count(x => x.Value == value) >= 3;
@@ -36,6 +41,44 @@ namespace BlazorYahtzee.Models
         public bool HasFourOfAKind(int value)
         {
             return _collection.Count(x => x.Value == value) >= 4;
+        }
+
+        public bool HasAnyPair()
+        {
+            return HasPairOf(1)
+                   || HasPairOf(2)
+                   || HasPairOf(3)
+                   || HasPairOf(4)
+                   || HasPairOf(5)
+                   || HasPairOf(6);
+        }
+
+        public bool HasTwoPair()
+        {
+            var groups = _collection
+                .GroupBy(x => x.Value)
+                .Select(group => new
+                {
+                    Value = group.Key,
+                    Count = group.Count()
+                })
+                .OrderByDescending(x => x.Count);
+
+            if (groups.Count() == 2 &&
+                groups.ElementAt(0).Count == 3 &&
+                groups.ElementAt(1).Count == 2)
+            {
+                return true;
+            }
+
+            if (groups.Count() == 3 &&
+                groups.ElementAt(0).Count == 2 &&
+                groups.ElementAt(1).Count == 2)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public bool HasAnyThreeOfAKind()
@@ -119,6 +162,33 @@ namespace BlazorYahtzee.Models
         public int SumOf(int value)
         {
             return _collection.Where(x => x.Value == value).Sum(x => x.Value);
+        }
+
+        public int SumOfTwoPair()
+        {
+            var groups = _collection
+                .GroupBy(x => x.Value)
+                .Select(group => new
+                {
+                    Value = group.Key,
+                    Count = group.Count()
+                })
+                .OrderByDescending(x => x.Count);
+
+            var isFullHouse = groups.Count() == 2 &&
+                              groups.ElementAt(0).Count == 3 &&
+                              groups.ElementAt(1).Count == 2;
+
+            var isTwoPair = groups.Count() == 3 &&
+                            groups.ElementAt(0).Count == 2 &&
+                            groups.ElementAt(1).Count == 2;
+
+            if (isFullHouse || isTwoPair)
+            {
+                return (groups.ElementAt(0).Value + groups.ElementAt(1).Value) * 2;
+            }
+
+            return 0;
         }
 
         public int SumOfAKind(int count)

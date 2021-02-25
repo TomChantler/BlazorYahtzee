@@ -11,9 +11,12 @@ namespace BlazorYahtzee.Models
 
         public bool HasForcedPlay { get; private set; }
 
-        public Player()
+        public Player(IEnumerable<ColumnType> columns)
         {
-            _plays.Add(new Plays(ColumnType.Free));
+            foreach (var column in columns)
+            {
+                _plays.Add(new Plays(column));
+            }
         }
 
         public Plays Plays(ColumnType type) => _plays.Single(x => x.Type == type);

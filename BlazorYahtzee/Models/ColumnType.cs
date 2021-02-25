@@ -2,8 +2,8 @@
 {
     public enum ColumnType
     {
-        Up,
         Down,
+        Up,
         Free,
         Announce
     }

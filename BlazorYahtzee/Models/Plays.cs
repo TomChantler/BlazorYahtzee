@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BlazorYahtzee.Models.Categories;
 
@@ -26,6 +27,11 @@ namespace BlazorYahtzee.Models
         public void Reset()
         {
             _collection.Clear();
+        }
+
+        public bool HasPlay(Type category)
+        {
+            return _collection.Exists(x => x.Category.GetType().IsAssignableFrom(category));
         }
 
         public bool HasPlay(ICategory category)
