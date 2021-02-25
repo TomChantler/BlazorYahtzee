@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{834CB9C8-E552-4D02-955A-1F3265378188}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\azure-static-web-apps-proud-dune-0d0ca0d03.yml = .github\workflows\azure-static-web-apps-proud-dune-0d0ca0d03.yml
+		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject

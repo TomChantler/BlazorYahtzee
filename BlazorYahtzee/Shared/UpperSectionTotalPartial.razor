@@ -8,7 +8,7 @@
     @foreach (var column in Mode.Columns)
     {
         <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column).ScoreForUpperSection()
+            @Player.Plays(column.Type).ScoreForUpperSection()
         </div>
     }
 </div>
@@ -20,7 +20,7 @@
     @foreach (var column in Mode.Columns)
     {
         <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @(Player.Plays(column).HasBonus() ? 35 : 0)
+            @(Player.Plays(column.Type).HasBonus() ? 35 : 0)
         </div>
     }
 </div>
@@ -32,7 +32,7 @@
     @foreach (var column in Mode.Columns)
     {
         <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column).ScoreForUpperSectionWithBonus()
+            @Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
         </div>
     }
 </div>

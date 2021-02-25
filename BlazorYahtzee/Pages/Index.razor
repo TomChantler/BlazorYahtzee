@@ -2,6 +2,7 @@
 
 @using BlazorYahtzee.Models
 @using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Columns
 @using BlazorYahtzee.Models.Modes
 @using BlazorYahtzee.Services
 
@@ -11,6 +12,7 @@
 <div class="container">
     <div class="row">
         <div class="col-9">
+            <HeaderFooterPartial Mode="Game.Mode" />
             @foreach (var category in UpperSectionCategories())
             {
                 <SectionPartial Mode="Game.Mode"
@@ -38,6 +40,7 @@
                                  IsRolling="IsRolling"
                                  OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
             <LowerSectionTotalPartial Mode="Game.Mode" Player="Player" />
+            <HeaderFooterPartial Mode="Game.Mode" />
         </div>
         <div class="col-3 text-center">
             @foreach (var die in Player.Dice.Collection)

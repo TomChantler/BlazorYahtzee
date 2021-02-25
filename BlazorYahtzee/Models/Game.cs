@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BlazorYahtzee.Models.Modes;
 
 namespace BlazorYahtzee.Models
@@ -19,7 +20,7 @@ namespace BlazorYahtzee.Models
             };
 
             Mode = mode;
-            Player = new Player(mode.Columns);
+            Player = new Player(mode.Columns.Select(x => x.Type));
             TurnsRemaining = mode.NumberOfTurns;
         }
     }

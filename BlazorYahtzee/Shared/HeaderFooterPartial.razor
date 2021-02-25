@@ -1,0 +1,19 @@
+﻿@using BlazorYahtzee.Models.Modes
+
+@if (Mode.Columns.Count() > 1)
+{
+    <div class="row">
+        <div class="@Mode.CategoryCssClassName p-2">&nbsp;</div>
+        @foreach (var column in Mode.Columns)
+        {
+            <div class="@Mode.ColumnCssClassName p-2 border text-center">
+                <h4 class="@column.IconCssClassName mb-0"></h4>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IMode Mode { get; set; }
+}

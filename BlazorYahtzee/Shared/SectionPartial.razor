@@ -1,5 +1,6 @@
 ﻿@using BlazorYahtzee.Models
 @using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Columns
 @using BlazorYahtzee.Models.Modes
 
 <div class="row">
@@ -8,10 +9,10 @@
     </div>
     @foreach (var column in Mode.Columns)
     {
-        @if (Player.Plays(column).HasPlay(Category))
+        @if (Player.Plays(column.Type).HasPlay(Category))
         {
             <div class="@Mode.ColumnCssClassName p-2 border text-right">
-                @Player.Plays(column).ScoreFor(Category)
+                @Player.Plays(column.Type).ScoreFor(Category)
             </div>
         }
         else
@@ -19,13 +20,13 @@
             <div class="@Mode.ColumnCssClassName p-1 border text-right">
                 @if (!IsRolling)
                 {
-                    if (ShowClaimButton(column))
+                    if (ShowClaimButton(column.Type))
                     {
-                        <button type="button" class="btn btn-primary btn-sm px-3" @onclick="@(async () => await ClaimCategory(Category, column))">@Category.PointsFor(Player)</button>
+                        <button type="button" class="btn btn-primary btn-sm px-3" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Player)</button>
                     }
-                    if (ShowScratchButton(column))
+                    if (ShowScratchButton(column.Type))
                     {
-                        <button type="button" class="btn btn-outline-primary btn-sm px-3" @onclick="@(async () => await ClaimCategory(Category, column))">@Category.PointsFor(Player)</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm px-3" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Player)</button>
                     }
                 }
                 else

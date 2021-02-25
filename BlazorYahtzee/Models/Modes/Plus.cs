@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BlazorYahtzee.Models.Categories;
+using BlazorYahtzee.Models.Columns;
 
 namespace BlazorYahtzee.Models.Modes
 {
@@ -7,12 +8,12 @@ namespace BlazorYahtzee.Models.Modes
     {
         public ModeType Type { get; } = ModeType.Plus;
 
-        public ColumnType[] Columns { get; } =
+        public IEnumerable<IColumn> Columns { get; } = new List<IColumn>
         {
-            ColumnType.Down, 
-            ColumnType.Up, 
-            ColumnType.Free, 
-            ColumnType.Announce
+            new Down(),
+            new Up(),
+            new Free(),
+            new Announce()
         };
 
         public IEnumerable<ICategory> Categories { get; } = new List<ICategory>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BlazorYahtzee.Models.Columns;
 
 namespace BlazorYahtzee.Models
 {

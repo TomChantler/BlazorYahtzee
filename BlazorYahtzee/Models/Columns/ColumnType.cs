@@ -1,4 +1,4 @@
-﻿namespace BlazorYahtzee.Models
+﻿namespace BlazorYahtzee.Models.Columns
 {
     public enum ColumnType
     {

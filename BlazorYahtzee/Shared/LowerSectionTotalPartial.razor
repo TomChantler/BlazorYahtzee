@@ -8,7 +8,7 @@
     @foreach (var column in Mode.Columns)
     {
         <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column).ScoreForLowerSection()
+            @Player.Plays(column.Type).ScoreForLowerSection()
         </div>
     }
 </div>
@@ -20,19 +20,19 @@
     @foreach (var column in Mode.Columns)
     {
         <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column).ScoreForUpperSectionWithBonus()
+            @Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
         </div>
     }
 </div>
 
 <div class="row">
     <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
-        Column Total
+        @GrandTotalText()
     </div>
     @foreach (var column in Mode.Columns)
     {
         <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column).TotalScore()
+            @Player.Plays(column.Type).TotalScore()
         </div>
     }
 </div>
@@ -43,4 +43,9 @@
 
     [Parameter]
     public Player Player { get; set; }
+
+    private string GrandTotalText()
+    {
+        return Mode.Columns.Count() > 1 ? "Column Total" : "Grand Total";
+    }
 }

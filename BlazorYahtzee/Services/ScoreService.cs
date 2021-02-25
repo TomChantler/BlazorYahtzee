@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorYahtzee.Data;
 using BlazorYahtzee.Models;
+using BlazorYahtzee.Models.Columns;
 
 namespace BlazorYahtzee.Services
 {

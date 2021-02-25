@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using BlazorYahtzee.Models.Categories;
+using BlazorYahtzee.Models.Columns;
 
 namespace BlazorYahtzee.Models.Modes
 {
     public interface IMode
     {
         ModeType Type { get; }
-        ColumnType[] Columns { get; }
+        IEnumerable<IColumn> Columns { get; }
         IEnumerable<ICategory> Categories { get; }
         int NumberOfTurns { get; }
         string CategoryCssClassName { get; }

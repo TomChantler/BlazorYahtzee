@@ -1,4 +1,6 @@
-﻿namespace BlazorYahtzee.Models.Categories
+﻿using BlazorYahtzee.Models.Columns;
+
+namespace BlazorYahtzee.Models.Categories
 {
     public class SmallStraight : ICategory
     {
