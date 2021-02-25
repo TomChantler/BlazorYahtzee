@@ -1,39 +1,46 @@
 ﻿@using BlazorYahtzee.Models
 @using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Modes
 
 <div class="row">
-    <div class="col-6 p-2 border">
+    <div class="@Mode.CategoryCssClassName p-2 border">
         @Category.Name
     </div>
-    @if (Player.Plays(ColumnType.Free).HasPlay(Category))
+    @foreach (var column in Mode.Columns)
     {
-        <div class="col-6 p-2 border text-right">
-            @Player.Plays(ColumnType.Free).ScoreFor(Category)
-        </div>
-    }
-    else
-    {
-        <div class="col-6 p-1 border text-right">
-            @if (!IsRolling)
-            {
-                if (ShowBlueButton())
+        @if (Player.Plays(column).HasPlay(Category))
+        {
+            <div class="@Mode.ColumnCssClassName p-2 border text-right">
+                @Player.Plays(column).ScoreFor(Category)
+            </div>
+        }
+        else
+        {
+            <div class="@Mode.ColumnCssClassName p-1 border text-right">
+                @if (!IsRolling)
                 {
-                    <button type="button" class="btn btn-primary btn-sm px-3" @onclick="@(async () => await OnCategoryClaimed.InvokeAsync(Category))">@Category.PointsFor(Player)</button>
+                    if (ShowClaimButton(column))
+                    {
+                        <button type="button" class="btn btn-primary btn-sm px-3" @onclick="@(async () => await ClaimCategory(Category, column))">@Category.PointsFor(Player)</button>
+                    }
+                    if (ShowScratchButton(column))
+                    {
+                        <button type="button" class="btn btn-outline-primary btn-sm px-3" @onclick="@(async () => await ClaimCategory(Category, column))">@Category.PointsFor(Player)</button>
+                    }
                 }
-                if (ShowWhiteButton())
+                else
                 {
-                    <button type="button" class="btn btn-outline-primary btn-sm px-3" @onclick="@(async () => await OnCategoryClaimed.InvokeAsync(Category))">@Category.PointsFor(Player)</button>
+                    // TODO: Show the temporary points assigned to the category
                 }
-            }
-            else
-            {
-                // TODO: Display the temporary points assigned to the category
-            }
-        </div>
+            </div>
+        }
     }
 </div>
 
 @code {
+    [Parameter]
+    public IMode Mode { get; set; }
+
     [Parameter]
     public Player Player { get; set; }
 
@@ -50,15 +57,25 @@
     public bool IsRolling { get; set; }
 
     [Parameter]
-    public EventCallback<ICategory> OnCategoryClaimed { get; set; }
+    public EventCallback OnCategoryClaimed { get; set; }
 
-    private bool ShowBlueButton()
+    private async Task ClaimCategory(ICategory category, ColumnType column)
     {
-        return (!IsStartOfTurn || Player.HasForcedPlay) && Category.CanBeClaimedInFull(Player);
+        Player.Plays(column).Add(category, category.PointsFor(Player));
+        await OnCategoryClaimed.InvokeAsync();
     }
 
-    private bool ShowWhiteButton()
+    private bool ShowClaimButton(ColumnType column)
     {
-        return (IsEndOfTurn || Player.HasForcedPlay) && !Category.CanBeClaimedInFull(Player);
+        return (!IsStartOfTurn || Player.HasForcedPlay) &&
+               Category.CanBePlayed(Player, column) &&
+               Category.CanBeClaimedInFull(Player);
+    }
+
+    private bool ShowScratchButton(ColumnType column)
+    {
+        return (IsEndOfTurn || Player.HasForcedPlay) &&
+               Category.CanBePlayed(Player, column) &&
+               !Category.CanBeClaimedInFull(Player);
     }
 }

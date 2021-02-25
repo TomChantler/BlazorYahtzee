@@ -13,32 +13,31 @@
         <div class="col-9">
             @foreach (var category in UpperSectionCategories())
             {
-                <SectionPartial Player="Player"
+                <SectionPartial Mode="Game.Mode"
+                                Player="Player"
                                 Category="category"
                                 IsStartOfTurn="IsStartOfTurn()"
                                 IsEndOfTurn="IsEndOfTurn()"
                                 IsRolling="IsRolling"
                                 OnCategoryClaimed="OnCategoryClaimed" />
             }
-            <TotalPartial Text="Total" Points="@Player.Plays(ColumnType.Free).ScoreForUpperSection()" />
-            <TotalPartial Text="Bonus" Points="@(Player.Plays(ColumnType.Free).HasBonus() ? 35 : 0)" />
-            <TotalPartial Text="Upper Section" Points="@Player.Plays(ColumnType.Free).ScoreForUpperSectionWithBonus()" />
+            <UpperSectionTotalPartial Mode="Game.Mode" Player="Player" />
             @foreach (var category in LowerSectionCategories())
             {
-                <SectionPartial Player="Player"
+                <SectionPartial Mode="Game.Mode"
+                                Player="Player"
                                 Category="category"
                                 IsStartOfTurn="IsStartOfTurn()"
                                 IsEndOfTurn="IsEndOfTurn()"
                                 IsRolling="IsRolling"
                                 OnCategoryClaimed="OnCategoryClaimed" />
             }
-            <YahtzeeBonusPartial Player="@Player" 
-                                 IsStartOfTurn="IsStartOfTurn()" 
-                                 IsRolling="IsRolling" 
-                                 OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed"/>
-            <TotalPartial Text="Lower Section" Points="@Player.Plays(ColumnType.Free).ScoreForLowerSection()" />
-            <TotalPartial Text="Upper Section" Points="@Player.Plays(ColumnType.Free).ScoreForUpperSectionWithBonus()" />
-            <TotalPartial Text="Grand Total" Points="@Player.Plays(ColumnType.Free).TotalScore()" />
+            <YahtzeeBonusPartial Mode="Game.Mode"
+                                 Player="@Player"
+                                 IsStartOfTurn="IsStartOfTurn()"
+                                 IsRolling="IsRolling"
+                                 OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
+            <LowerSectionTotalPartial Mode="Game.Mode" Player="Player" />
         </div>
         <div class="col-3 text-center">
             @foreach (var die in Player.Dice.Collection)
@@ -179,18 +178,14 @@
         }
     }
 
-    public async Task OnCategoryClaimed(ICategory category)
+    public async Task OnCategoryClaimed()
     {
-        Player.Plays(ColumnType.Free).Add(category, category.PointsFor(Player));
         await NextTurn();
     }
 
     public async Task OnYahtzeeBonusClaimed()
     {
         await Task.CompletedTask;
-        var yahtzee = new Yahtzee();
-        Player.Plays(ColumnType.Free).Add(yahtzee, yahtzee.PointsFor(Player));
-        Player.ForcePlay();
         RollsRemaining = 0;
     }
 }

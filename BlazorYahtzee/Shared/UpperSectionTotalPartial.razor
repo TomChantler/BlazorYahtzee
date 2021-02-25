@@ -1,0 +1,46 @@
+﻿@using BlazorYahtzee.Models
+@using BlazorYahtzee.Models.Modes
+
+<div class="row">
+    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+        Total
+    </div>
+    @foreach (var column in Mode.Columns)
+    {
+        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @Player.Plays(column).ScoreForUpperSection()
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+        Bonus
+    </div>
+    @foreach (var column in Mode.Columns)
+    {
+        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @(Player.Plays(column).HasBonus() ? 35 : 0)
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+        Upper Section
+    </div>
+    @foreach (var column in Mode.Columns)
+    {
+        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @Player.Plays(column).ScoreForUpperSectionWithBonus()
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IMode Mode { get; set; }
+
+    [Parameter]
+    public Player Player { get; set; }
+}

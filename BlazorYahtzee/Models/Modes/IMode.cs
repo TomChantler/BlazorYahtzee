@@ -9,5 +9,7 @@ namespace BlazorYahtzee.Models.Modes
         ColumnType[] Columns { get; }
         IEnumerable<ICategory> Categories { get; }
         int NumberOfTurns { get; }
+        string CategoryCssClassName { get; }
+        string ColumnCssClassName { get; }
     }
 }

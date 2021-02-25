@@ -35,5 +35,7 @@ namespace BlazorYahtzee.Models.Modes
         };
 
         public int NumberOfTurns { get; } = 60;
+        public string CategoryCssClassName { get; } = "col-4";
+        public string ColumnCssClassName { get; } = "col-2";
     }
 }
