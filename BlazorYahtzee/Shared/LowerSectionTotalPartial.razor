@@ -1,51 +1,47 @@
 ﻿@using BlazorYahtzee.Models
-@using BlazorYahtzee.Models.Modes
 
 <div class="row">
-    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
         Lower Section
     </div>
-    @foreach (var column in Mode.Columns)
+    @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column.Type).ScoreForLowerSection()
+        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @Game.Player.Plays(column.Type).ScoreForLowerSection()
         </div>
     }
 </div>
 
 <div class="row">
-    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
         Upper Section
     </div>
-    @foreach (var column in Mode.Columns)
+    @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
+        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @Game.Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
         </div>
     }
 </div>
 
 <div class="row">
-    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
         @GrandTotalText()
     </div>
-    @foreach (var column in Mode.Columns)
+    @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @Player.Plays(column.Type).TotalScore()
+        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @Game.Player.Plays(column.Type).TotalScore()
         </div>
     }
 </div>
 
 @code {
-    [Parameter]
-    public IMode Mode { get; set; }
-
-    [Parameter]
-    public Player Player { get; set; }
+    [CascadingParameter]
+    public Game Game { get; set; }
 
     private string GrandTotalText()
     {
-        return Mode.Columns.Count() > 1 ? "Column Total" : "Grand Total";
+        return Game.Mode.Columns.Count() > 1 ? "Column Total" : "Grand Total";
     }
 }

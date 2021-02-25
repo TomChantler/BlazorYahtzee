@@ -1,24 +1,23 @@
 ﻿@using BlazorYahtzee.Models
 @using BlazorYahtzee.Models.Categories
 @using BlazorYahtzee.Models.Columns
-@using BlazorYahtzee.Models.Modes
 
 <div class="row">
-    <div class="@Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
         Yahtzee Bonus
     </div>
-    @foreach (var column in Mode.Columns)
+    @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
-            @if (Player.Plays(column.Type).HasMultipleYahtzeePlays())
+        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+            @if (Game.Player.Plays(column.Type).HasMultipleYahtzeePlays())
             {
-                @Player.Plays(column.Type).ScoreForYahtzeeBonus()
+                @Game.Player.Plays(column.Type).ScoreForYahtzeeBonus()
             }
             else
             {
                 <text>0</text>
             }
-            @if (Player.Dice.HasYahtzee() && Player.Plays(column.Type).HasYahtzeePlayForBonus() && !Player.HasForcedPlay && !IsStartOfTurn && !IsRolling)
+            @if (Game.Player.Dice.HasYahtzee() && Game.Player.Plays(column.Type).HasYahtzeePlayForBonus() && !Game.Player.HasForcedPlay && !IsStartOfTurn && !IsRolling)
             {
                 <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(async () => await ClaimYahtzeeBonus(column.Type))">+ 100</button>
             }
@@ -27,11 +26,8 @@
 </div>
 
 @code {
-    [Parameter]
-    public IMode Mode { get; set; }
-
-    [Parameter]
-    public Player Player { get; set; }
+    [CascadingParameter]
+    public Game Game { get; set; }
 
     [Parameter]
     public bool IsStartOfTurn { get; set; }
@@ -45,8 +41,8 @@
     private async Task ClaimYahtzeeBonus(ColumnType column)
     {
         var yahtzee = new Yahtzee();
-        Player.Plays(column).Add(yahtzee, yahtzee.PointsFor(Player));
-        Player.ForcePlay();
+        Game.Player.Plays(column).Add(yahtzee, yahtzee.PointsFor(Game.Player));
+        Game.Player.ForcePlay();
         await OnYahtzeeBonusClaimed.InvokeAsync();
     }
 }

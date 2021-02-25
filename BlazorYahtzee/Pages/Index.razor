@@ -9,7 +9,6 @@
 
 <div class="container">
     <div class="row">
-
         @if (Game == null)
         {
             <div class="col-sm-6">
@@ -48,35 +47,31 @@
         else
         {
             <div class="col-9">
-                <HeaderFooterPartial Mode="Game.Mode" />
-                @foreach (var category in UpperSectionCategories())
-                {
-                    <SectionPartial Mode="Game.Mode"
-                                    Player="Player"
-                                    Category="category"
-                                    IsStartOfTurn="IsStartOfTurn()"
-                                    IsEndOfTurn="IsEndOfTurn()"
-                                    IsRolling="IsRolling"
-                                    OnCategoryClaimed="OnCategoryClaimed" />
-                }
-                <UpperSectionTotalPartial Mode="Game.Mode" Player="Player" />
-                @foreach (var category in LowerSectionCategories())
-                {
-                    <SectionPartial Mode="Game.Mode"
-                                    Player="Player"
-                                    Category="category"
-                                    IsStartOfTurn="IsStartOfTurn()"
-                                    IsEndOfTurn="IsEndOfTurn()"
-                                    IsRolling="IsRolling"
-                                    OnCategoryClaimed="OnCategoryClaimed" />
-                }
-                <YahtzeeBonusPartial Mode="Game.Mode"
-                                     Player="@Player"
-                                     IsStartOfTurn="IsStartOfTurn()"
-                                     IsRolling="IsRolling"
-                                     OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
-                <LowerSectionTotalPartial Mode="Game.Mode" Player="Player" />
-                <HeaderFooterPartial Mode="Game.Mode" />
+                <CascadingValue Value="Game">
+                    <HeaderFooterPartial />
+                    @foreach (var category in UpperSectionCategories())
+                    {
+                        <SectionPartial Category="category"
+                                        IsStartOfTurn="IsStartOfTurn()"
+                                        IsEndOfTurn="IsEndOfTurn()"
+                                        IsRolling="IsRolling"
+                                        OnCategoryClaimed="OnCategoryClaimed" />
+                    }
+                    <UpperSectionTotalPartial />
+                    @foreach (var category in LowerSectionCategories())
+                    {
+                        <SectionPartial Category="category"
+                                        IsStartOfTurn="IsStartOfTurn()"
+                                        IsEndOfTurn="IsEndOfTurn()"
+                                        IsRolling="IsRolling"
+                                        OnCategoryClaimed="OnCategoryClaimed" />
+                    }
+                    <YahtzeeBonusPartial IsStartOfTurn="IsStartOfTurn()"
+                                         IsRolling="IsRolling"
+                                         OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
+                    <LowerSectionTotalPartial />
+                    <HeaderFooterPartial />
+                </CascadingValue>
             </div>
             <div class="col-3 text-center">
                 @foreach (var die in Player.Dice.Collection)
