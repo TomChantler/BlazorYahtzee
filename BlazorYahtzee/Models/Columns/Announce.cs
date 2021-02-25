@@ -3,6 +3,6 @@
     public class Announce : IColumn
     {
         public ColumnType Type { get; } = ColumnType.Announce;
-        public string IconCssClassName { get; } = "far fa-smile";
+        public string IconCssClassName { get; } = "fas fa-bullhorn";
     }
 }

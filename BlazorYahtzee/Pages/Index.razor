@@ -16,7 +16,14 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Yahtzee</h5>
-                        <p class="card-text">Standard Yahtzee game with 13 turns in total.</p>
+                        <p class="card-text">
+                            Standard Yahtzee game.
+                            <ul>
+                                <li>Columns: 1 (Free)</li>
+                                <li>Categories: 13</li>
+                                <li>Turns: 13</li>
+                            </ul>
+                        </p>
                         <button class="btn btn-primary" @onclick="@(() => NewGame(ModeType.Standard))">Yahtzee</button>
                     </div>
                 </div>
@@ -25,7 +32,14 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Yahtzee Plus</h5>
-                        <p class="card-text">Enhanced Yahtzee game with 4 columns and 60 turns in total.</p>
+                        <p class="card-text">
+                            Enhanced Yahtzee game.
+                            <ul>
+                                <li>Columns: 4 (Down, Up, Free, Announce)</li>
+                                <li>Categories: 15</li>
+                                <li>Turns: 60</li>
+                            </ul>
+                        </p>
                         <button class="btn btn-primary" @onclick="@(() => NewGame(ModeType.Plus))">Yahtzee Plus</button>
                     </div>
                 </div>
@@ -114,6 +128,10 @@
                     <div>Turns</div>
                     <div class="font-weight-bold">@CurrentTurn()/@Game.Mode.NumberOfTurns</div>
                 </div>
+                @if (!IsGameOver())
+                {
+                    <button class="btn btn-warning" @onclick="@(() => Game = null)">Reset</button>
+                }
             </div>
         }
     </div>
