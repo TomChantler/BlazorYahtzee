@@ -80,7 +80,7 @@
                 }
                 <div class="row mt-3 mb-4">
                     <div class="col">
-                        @if (!IsEndOfTurn() && !IsGameOver())
+                        @if (!IsEndOfTurn() && !Game.IsOver())
                         {
                             if (IsRolling)
                             {
@@ -91,7 +91,7 @@
                                 <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
                             }
                         }
-                        else if (IsGameOver())
+                        else if (Game.IsOver())
                         {
                             <div class="font-weight-bold">Game Over</div>
                             <div>Final score: @Player.TotalScore()</div>
@@ -123,7 +123,7 @@
                     <div>Turns</div>
                     <div class="font-weight-bold">@CurrentTurn()/@Game.Mode.NumberOfTurns</div>
                 </div>
-                @if (!IsGameOver())
+                @if (!Game.IsOver())
                 {
                     <button class="btn btn-warning btn-sm" @onclick="@(() => Game = null)">Reset</button>
                 }
@@ -168,11 +168,6 @@
         return RollsRemaining == 0;
     }
 
-    private bool IsGameOver()
-    {
-        return Game.TurnsRemaining == 0;
-    }
-
     private async Task RollDice()
     {
         IsRolling = true;
@@ -206,12 +201,12 @@
 
     private int CurrentRoll()
     {
-        return IsGameOver() ? 3 : 3 - RollsRemaining;
+        return Game.IsOver() ? 3 : 3 - RollsRemaining;
     }
 
     private int CurrentTurn()
     {
-        return IsGameOver() ? Game.Mode.NumberOfTurns : Game.Mode.NumberOfTurns - Game.TurnsRemaining + 1;
+        return Game.IsOver() ? Game.Mode.NumberOfTurns : Game.Mode.NumberOfTurns - Game.TurnsRemaining + 1;
     }
 
     private async Task NextTurn()
@@ -220,7 +215,7 @@
         RollsRemaining = 3;
         Player.ResetTurn();
 
-        if (IsGameOver())
+        if (Game.IsOver())
         {
             await ScoreService.AddScoreAsync(Game);
         }

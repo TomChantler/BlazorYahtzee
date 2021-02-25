@@ -23,5 +23,10 @@ namespace BlazorYahtzee.Models
             Player = new Player(mode.Columns.Select(x => x.Type));
             TurnsRemaining = mode.NumberOfTurns;
         }
+
+        public bool IsOver()
+        {
+            return TurnsRemaining == 0;
+        }
     }
 }
