@@ -200,7 +200,8 @@ namespace BlazorYahtzee.Models
                     Value = group.Key,
                     Count = group.Count()
                 })
-                .OrderByDescending(x => x.Count);
+                .OrderByDescending(x => x.Count)
+                .ThenByDescending(x => x.Value);
 
             var mostCommonValue = groups.First().Value;
 

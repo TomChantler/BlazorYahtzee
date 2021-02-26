@@ -90,6 +90,7 @@
     private bool ShowClaimButton(ColumnType columnType)
     {
         return (!Game.Player.IsStartOfTurn() || Game.Player.HasForcedPlay) &&
+               !IsRolling &&
                columnType != ColumnType.Announce &&
                !Game.Player.HasDeclaredCategory() &&
                Category.CanBePlayed(Game.Player, columnType) &&

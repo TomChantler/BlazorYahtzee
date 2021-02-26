@@ -12,7 +12,7 @@ namespace BlazorYahtzee.Models
 
         private readonly IList<Plays> _plays = new List<Plays>();
 
-        public int NumberOfRolls { get; }
+        public int TotalRollsAllowed { get; }
 
         public int RollsRemaining { get; private set; }
 
@@ -27,7 +27,7 @@ namespace BlazorYahtzee.Models
                 _plays.Add(new Plays(columnType));
             }
 
-            NumberOfRolls = mode.NumberOfRolls;
+            TotalRollsAllowed = mode.NumberOfRolls;
             RollsRemaining = mode.NumberOfRolls;
         }
 
@@ -53,12 +53,12 @@ namespace BlazorYahtzee.Models
 
         public bool IsFirstRoll()
         {
-            return NumberOfRolls - RollsRemaining == 1;
+            return TotalRollsAllowed - RollsRemaining == 1;
         }
 
         public bool IsStartOfTurn()
         {
-            return RollsRemaining == NumberOfRolls;
+            return RollsRemaining == TotalRollsAllowed;
         }
 
         public bool IsEndOfTurn()
@@ -90,7 +90,7 @@ namespace BlazorYahtzee.Models
         {
             Dice.Release();
             HasForcedPlay = false;
-            RollsRemaining = NumberOfRolls;
+            RollsRemaining = TotalRollsAllowed;
         }
 
         public void RemoveRemainingRolls()

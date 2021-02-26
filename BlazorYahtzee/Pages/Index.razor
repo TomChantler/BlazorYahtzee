@@ -61,6 +61,7 @@
                     {
                         <SectionPartial Category="category"
                                         IsRolling="IsRolling"
+                                        OnCategoryDeclared="OnCategoryDeclared"
                                         OnCategoryClaimed="OnCategoryClaimed" />
                     }
                     <YahtzeeBonusPartial IsRolling="IsRolling"
@@ -120,7 +121,7 @@
                     </div>
                     @if (!Game.IsOver())
                     {
-                        <button class="btn btn-warning btn-sm" @onclick="@(() => Game = null)">Reset</button>
+                        <button class="btn btn-success btn-sm" @onclick="@(() => Game = null)">Reset</button>
                     }
                 </div>
             </CascadingValue>
@@ -157,7 +158,6 @@
         {
             await Task.Delay(200);
             die.AssignValue(random.Next(1, 7));
-            die.Stop();
             StateHasChanged();
         }
 

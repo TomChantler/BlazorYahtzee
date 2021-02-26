@@ -11,6 +11,7 @@
         public void AssignValue(int value)
         {
             Value = value;
+            Stop();
         }
 
         public void Hold()

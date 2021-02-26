@@ -14,7 +14,7 @@
             }
             else
             {
-                <i class="fas fa-4x fa-dice-@Die.ClassName()" @onclick="@(() => Die.Hold())"></i>
+                <i class="fas fa-4x fa-dice-@Die.ClassName()" @onclick="@(() => Hold())"></i>
             }
         }
     </div>
@@ -26,4 +26,12 @@
 
     [Parameter]
     public Die Die { get; set; }
+
+    private void Hold()
+    {
+        if (!Game.Player.IsEndOfTurn())
+        {
+            Die.Hold();
+        }
+    }
 }
