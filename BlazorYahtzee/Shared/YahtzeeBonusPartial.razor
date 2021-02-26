@@ -17,7 +17,7 @@
             {
                 <text>0</text>
             }
-            @if (Game.Player.Dice.HasYahtzee() && Game.Player.Plays(column.Type).HasYahtzeePlayForBonus() && !Game.Player.HasForcedPlay && !IsStartOfTurn && !IsRolling)
+            @if (Game.Player.Dice.HasYahtzee() && Game.Player.Plays(column.Type).HasYahtzeePlayForBonus() && !Game.Player.HasForcedPlay && !Game.Player.IsStartOfTurn() && !IsRolling)
             {
                 <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(async () => await ClaimYahtzeeBonus(column.Type))">+ 100</button>
             }
@@ -28,9 +28,6 @@
 @code {
     [CascadingParameter]
     public Game Game { get; set; }
-
-    [Parameter]
-    public bool IsStartOfTurn { get; set; }
 
     [Parameter]
     public bool IsRolling { get; set; }

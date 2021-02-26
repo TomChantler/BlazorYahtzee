@@ -45,12 +45,6 @@
     public ICategory Category { get; set; }
 
     [Parameter]
-    public bool IsStartOfTurn { get; set; }
-
-    [Parameter]
-    public bool IsEndOfTurn { get; set; }
-
-    [Parameter]
     public bool IsRolling { get; set; }
 
     [Parameter]
@@ -64,14 +58,14 @@
 
     private bool ShowClaimButton(ColumnType column)
     {
-        return (!IsStartOfTurn || Game.Player.HasForcedPlay) &&
+        return (!Game.Player.IsStartOfTurn() || Game.Player.HasForcedPlay) &&
                Category.CanBePlayed(Game.Player, column) &&
                Category.CanBeClaimedInFull(Game.Player);
     }
 
     private bool ShowScratchButton(ColumnType column)
     {
-        return (IsEndOfTurn || Game.Player.HasForcedPlay) &&
+        return (Game.Player.IsEndOfTurn() || Game.Player.HasForcedPlay) &&
                Category.CanBePlayed(Game.Player, column) &&
                !Category.CanBeClaimedInFull(Game.Player);
     }

@@ -8,7 +8,7 @@
         }
         else
         {
-            @if (IsStartOfTurn)
+            @if (Game.Player.IsStartOfTurn())
             {
                 <i class="fas fa-4x fa-dice-@Die.ClassName()"></i>
             }
@@ -21,9 +21,9 @@
 </div>
 
 @code {
-    [Parameter]
-    public Die Die { get; set; }
+    [CascadingParameter]
+    public Game Game { get; set; }
 
     [Parameter]
-    public bool IsStartOfTurn { get; set; }
+    public Die Die { get; set; }
 }

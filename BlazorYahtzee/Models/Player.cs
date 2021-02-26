@@ -10,6 +10,8 @@ namespace BlazorYahtzee.Models
 
         private readonly IList<Plays> _plays = new List<Plays>();
 
+        public int RollsRemaining { get; private set; } = 3;
+
         public bool HasForcedPlay { get; private set; }
 
         public Player(IEnumerable<ColumnType> columns)
@@ -21,7 +23,35 @@ namespace BlazorYahtzee.Models
         }
 
         public Plays Plays(ColumnType type) => _plays.Single(x => x.Type == type);
-        
+
+        public void RollDice()
+        {
+            RollsRemaining--;
+
+            foreach (var die in Dice.NotHeldCollection)
+            {
+                die.Roll();
+            }
+        }
+
+        public void HoldAllDice()
+        {
+            foreach (var die in Dice.NotHeldCollection)
+            {
+                die.Hold();
+            }
+        }
+
+        public bool IsStartOfTurn()
+        {
+            return RollsRemaining == 3;
+        }
+
+        public bool IsEndOfTurn()
+        {
+            return RollsRemaining == 0;
+        }
+
         public void ForcePlay()
         {
             HasForcedPlay = true;
@@ -31,6 +61,12 @@ namespace BlazorYahtzee.Models
         {
             Dice.Release();
             HasForcedPlay = false;
+            RollsRemaining = 3;
+        }
+
+        public void RemoveRemainingRolls()
+        {
+            RollsRemaining = 0;
         }
 
         public int TotalScore()
