@@ -25,7 +25,7 @@ namespace BlazorYahtzee.Models
             };
 
             Mode = mode;
-            Player = new Player(mode.Columns.Select(x => x.Type));
+            Player = new Player(mode);
             TurnsRemaining = mode.NumberOfTurns;
         }
 
@@ -36,7 +36,7 @@ namespace BlazorYahtzee.Models
 
         public int CurrentRoll()
         {
-            return IsOver() ? Mode.NumberOfDice : Mode.NumberOfDice - Player.RollsRemaining;
+            return IsOver() ? Mode.NumberOfRolls : Mode.NumberOfRolls - Player.RollsRemaining;
         }
 
         public int CurrentTurn()

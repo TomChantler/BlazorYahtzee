@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BlazorYahtzee.Models.Columns;
+using BlazorYahtzee.Models.Modes;
 
 namespace BlazorYahtzee.Models
 {
@@ -10,16 +11,21 @@ namespace BlazorYahtzee.Models
 
         private readonly IList<Plays> _plays = new List<Plays>();
 
-        public int RollsRemaining { get; private set; } = 3;
+        public int NumberOfRolls { get; }
+
+        public int RollsRemaining { get; private set; }
 
         public bool HasForcedPlay { get; private set; }
 
-        public Player(IEnumerable<ColumnType> columns)
+        public Player(IMode mode)
         {
-            foreach (var column in columns)
+            foreach (var columnType in mode.Columns.Select(x => x.Type))
             {
-                _plays.Add(new Plays(column));
+                _plays.Add(new Plays(columnType));
             }
+
+            NumberOfRolls = mode.NumberOfRolls;
+            RollsRemaining = mode.NumberOfRolls;
         }
 
         public Plays Plays(ColumnType type) => _plays.Single(x => x.Type == type);
@@ -44,7 +50,7 @@ namespace BlazorYahtzee.Models
 
         public bool IsStartOfTurn()
         {
-            return RollsRemaining == 3;
+            return RollsRemaining == NumberOfRolls;
         }
 
         public bool IsEndOfTurn()
@@ -61,7 +67,7 @@ namespace BlazorYahtzee.Models
         {
             Dice.Release();
             HasForcedPlay = false;
-            RollsRemaining = 3;
+            RollsRemaining = NumberOfRolls;
         }
 
         public void RemoveRemainingRolls()

@@ -11,6 +11,7 @@ namespace BlazorYahtzee.Models.Modes
         IEnumerable<ICategory> Categories { get; }
         int NumberOfDice { get; }
         int NumberOfTurns { get; }
+        int NumberOfRolls{ get; }
         string CategoryCssClassName { get; }
         string ColumnCssClassName { get; }
     }
