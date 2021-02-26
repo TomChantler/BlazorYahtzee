@@ -1,36 +1,36 @@
 ﻿@using BlazorYahtzee.Models
 
 <div class="row">
-    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
         Total
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right">
             @Game.Player.Plays(column.Type).ScoreForUpperSection()
         </div>
     }
 </div>
 
 <div class="row">
-    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
         Bonus
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right">
             @(Game.Player.Plays(column.Type).HasBonus() ? 35 : 0)
         </div>
     }
 </div>
 
 <div class="row">
-    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
         Upper Section
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right">
             @Game.Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
         </div>
     }
