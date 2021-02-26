@@ -8,7 +8,7 @@ namespace BlazorYahtzee.Models
     {
         public IMode Mode { get; }
         public Player Player { get; }
-        public int TurnsRemaining { get; set; }
+        public int TurnsRemaining { get; private set; }
 
         public Game(ModeType modeType)
         {
@@ -27,6 +27,22 @@ namespace BlazorYahtzee.Models
         public bool IsOver()
         {
             return TurnsRemaining == 0;
+        }
+
+        public int CurrentRoll()
+        {
+            return IsOver() ? 3 : 3 - Player.RollsRemaining;
+        }
+
+        public int CurrentTurn()
+        {
+            return IsOver() ? Mode.NumberOfTurns : Mode.NumberOfTurns - TurnsRemaining + 1;
+        }
+
+        public void NextTurn()
+        {
+            TurnsRemaining--;
+            Player.ResetTurn();
         }
     }
 }
