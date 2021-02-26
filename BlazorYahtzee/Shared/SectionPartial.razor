@@ -17,28 +17,21 @@
         else
         {
             <div class="@Game.Mode.ColumnCssClassName p-1 border text-center">
-                @if (!IsRolling)
+                @if (ShowClaimButton(column.Type))
                 {
-                    if (ShowClaimButton(column.Type))
-                    {
-                        <button type="button" class="btn btn-primary btn-sm btn-block p-0" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Game.Player)</button>
-                    }
-                    if (ShowScratchButton(column.Type))
-                    {
-                        <button type="button" class="btn btn-outline-primary btn-sm btn-block p-0" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Game.Player)</button>
-                    }
-                    if (ShowDeclareButton(column.Type))
-                    {
-                        <button type="button" class="btn btn-outline-warning btn-sm btn-block p-0" @onclick="@(async () => await DeclareCategory())">Declare</button>
-                    }
-                    if (ShowClaimDeclaredButton(column.Type))
-                    {
-                        <button type="button" class="btn btn-warning btn-sm btn-block p-0" @onclick="@(async () => await ClaimDeclaredCategory(Category))">@Category.PointsFor(Game.Player)</button>
-                    }
+                    <button type="button" class="btn btn-primary btn-sm btn-block p-0" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Game.Player)</button>
                 }
-                else
+                @if (ShowScratchButton(column.Type))
                 {
-                    // TODO: Show the temporary points assigned to the category
+                    <button type="button" class="btn btn-outline-primary btn-sm btn-block p-0" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Game.Player)</button>
+                }
+                @if (ShowDeclareButton(column.Type))
+                {
+                    <button type="button" class="btn btn-outline-warning btn-sm btn-block p-0" @onclick="@(async () => await DeclareCategory())">D</button>
+                }
+                @if (ShowClaimDeclaredButton(column.Type))
+                {
+                    <button type="button" class="btn btn-warning btn-sm btn-block p-0" @onclick="@(async () => await ClaimDeclaredCategory(Category))">@Category.PointsFor(Game.Player)</button>
                 }
             </div>
         }
@@ -82,6 +75,7 @@
     private bool ShowDeclareButton(ColumnType columnType)
     {
         return columnType == ColumnType.Announce &&
+               !IsRolling &&
                Game.Player.IsFirstRoll() &&
                !Game.Player.HasDeclaredCategory();
     }
@@ -105,6 +99,7 @@
     private bool ShowScratchButton(ColumnType columnType)
     {
         return (Game.Player.IsEndOfTurn() || Game.Player.HasForcedPlay) &&
+               !IsRolling &&
                columnType != ColumnType.Announce &&
                !Game.Player.HasDeclaredCategory() &&
                Category.CanBePlayed(Game.Player, columnType) &&
