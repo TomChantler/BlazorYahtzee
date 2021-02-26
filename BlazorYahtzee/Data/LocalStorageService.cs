@@ -30,6 +30,6 @@ namespace BlazorYahtzee.Data
             return data == null ? new List<Score>() : JsonSerializer.Deserialize<IEnumerable<Score>>(data);
         }
 
-        private static string Key(ModeType modeType) => $"{ScoresKey}|{modeType}";
+        private static string Key(ModeType modeType) => modeType == ModeType.Standard ? ScoresKey : $"{ScoresKey}|{modeType}";
     }
 }

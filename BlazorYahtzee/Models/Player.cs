@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BlazorYahtzee.Models.Categories;
 using BlazorYahtzee.Models.Columns;
 using BlazorYahtzee.Models.Modes;
 
@@ -16,6 +17,8 @@ namespace BlazorYahtzee.Models
         public int RollsRemaining { get; private set; }
 
         public bool HasForcedPlay { get; private set; }
+
+        public ICategory DeclaredCategory { get; private set; }
 
         public Player(IMode mode)
         {
@@ -48,6 +51,11 @@ namespace BlazorYahtzee.Models
             }
         }
 
+        public bool IsFirstRoll()
+        {
+            return NumberOfRolls - RollsRemaining == 1;
+        }
+
         public bool IsStartOfTurn()
         {
             return RollsRemaining == NumberOfRolls;
@@ -56,6 +64,21 @@ namespace BlazorYahtzee.Models
         public bool IsEndOfTurn()
         {
             return RollsRemaining == 0;
+        }
+
+        public void DeclareCategory(ICategory category)
+        {
+            DeclaredCategory = category;
+        }
+
+        public void ClearDeclaredCategory()
+        {
+            DeclaredCategory = null;
+        }
+
+        public bool HasDeclaredCategory()
+        {
+            return DeclaredCategory != null;
         }
 
         public void ForcePlay()
