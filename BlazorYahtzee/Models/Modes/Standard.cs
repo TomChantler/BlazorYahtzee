@@ -30,6 +30,7 @@ namespace BlazorYahtzee.Models.Modes
             new Chance()
         };
 
+        public int NumberOfDice { get; } = 3;
         public int NumberOfTurns { get; } = 13;
         public string CategoryCssClassName { get; } = "col-6";
         public string ColumnCssClassName { get; } = "col-6";

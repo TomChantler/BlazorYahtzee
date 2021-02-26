@@ -36,7 +36,7 @@ namespace BlazorYahtzee.Models
 
         public int CurrentRoll()
         {
-            return IsOver() ? 3 : 3 - Player.RollsRemaining;
+            return IsOver() ? Mode.NumberOfDice : Mode.NumberOfDice - Player.RollsRemaining;
         }
 
         public int CurrentTurn()
