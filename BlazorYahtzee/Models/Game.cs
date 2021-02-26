@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using BlazorYahtzee.Models.Categories;
 using BlazorYahtzee.Models.Modes;
 
 namespace BlazorYahtzee.Models
@@ -9,6 +11,9 @@ namespace BlazorYahtzee.Models
         public IMode Mode { get; }
         public Player Player { get; }
         public int TurnsRemaining { get; private set; }
+
+        public IEnumerable<ICategory> UpperSectionCategories() => Mode.Categories.Where(x => x.Section == SectionType.Upper);
+        public IEnumerable<ICategory> LowerSectionCategories() => Mode.Categories.Where(x => x.Section == SectionType.Lower);
 
         public Game(ModeType modeType)
         {
