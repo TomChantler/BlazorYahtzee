@@ -18,6 +18,8 @@ namespace BlazorYahtzee.Models
 
         public bool HasForcedPlay { get; private set; }
 
+        public ColumnType? ForcedPlayColumnType { get; private set; }
+
         public ICategory DeclaredCategory { get; private set; }
 
         public Player(IMode mode)
@@ -81,15 +83,17 @@ namespace BlazorYahtzee.Models
             return DeclaredCategory != null;
         }
 
-        public void ForcePlay()
+        public void ForcePlay(ColumnType columnType)
         {
             HasForcedPlay = true;
+            ForcedPlayColumnType = columnType;
         }
 
         public void ResetTurn()
         {
             Dice.Release();
             HasForcedPlay = false;
+            ForcedPlayColumnType = null;
             RollsRemaining = TotalRollsAllowed;
         }
 

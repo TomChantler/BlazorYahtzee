@@ -89,7 +89,7 @@
 
     private bool ShowClaimButton(ColumnType columnType)
     {
-        return (!Game.Player.IsStartOfTurn() || Game.Player.HasForcedPlay) &&
+        return (!Game.Player.IsStartOfTurn() && !Game.Player.HasForcedPlay || Game.Player.HasForcedPlay && Game.Player.ForcedPlayColumnType == columnType) &&
                !IsRolling &&
                columnType != ColumnType.Announce &&
                !Game.Player.HasDeclaredCategory() &&
@@ -99,7 +99,7 @@
 
     private bool ShowScratchButton(ColumnType columnType)
     {
-        return (Game.Player.IsEndOfTurn() || Game.Player.HasForcedPlay) &&
+        return (Game.Player.IsEndOfTurn() && !Game.Player.HasForcedPlay || Game.Player.HasForcedPlay && Game.Player.ForcedPlayColumnType == columnType) &&
                !IsRolling &&
                columnType != ColumnType.Announce &&
                !Game.Player.HasDeclaredCategory() &&

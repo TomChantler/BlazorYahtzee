@@ -11,38 +11,7 @@
     <div class="row">
         @if (Game == null)
         {
-            <div class="col-sm-6">
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title">Yahtzee</h5>
-                        <p class="card-text">
-                            Standard Yahtzee game.
-                            <ul>
-                                <li>Columns: 1 (Free)</li>
-                                <li>Categories: 13</li>
-                                <li>Turns: 13</li>
-                            </ul>
-                        </p>
-                        <button class="btn btn-primary" @onclick="@(() => NewGame(ModeType.Standard))">Yahtzee</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Yahtzee Plus</h5>
-                        <p class="card-text">
-                            Enhanced Yahtzee game.
-                            <ul>
-                                <li>Columns: 4 (Down, Up, Free, Announce)</li>
-                                <li>Categories: 15</li>
-                                <li>Turns: 60</li>
-                            </ul>
-                        </p>
-                        <button class="btn btn-primary" @onclick="@(() => NewGame(ModeType.Plus))">Yahtzee Plus</button>
-                    </div>
-                </div>
-            </div>
+            <GameModeSelectionPartial OnGameModeSelected="OnGameModeSelected" />
         }
         else
         {
@@ -129,30 +98,7 @@
     </div>
     @if (Game != null)
     {
-        <div class="row">
-            <div class="col">
-                <div class="accordion mt-3" id="legenda">
-                    <div class="card">
-                        <div class="card-header p-0" id="legenda-heading">
-                            <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#legenda-content" aria-expanded="false" aria-controls="legenda-content">
-                                    Legenda
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="legenda-content" class="collapse" aria-labelledby="legenda-heading" data-parent="#legenda">
-                            <div class="card-body">
-                                <p><h5 class="far fa-arrow-alt-circle-down mb-0"></h5> The column fills down from top to bottom.</p>
-                                <p><h5 class="far fa-arrow-alt-circle-up mb-0"></h5> The column fills up from the bottom to top.</p>
-                                <p><h5 class="far fa-smile mb-0"></h5> The column is filled without any restrictions.</p>
-                                <p><h5 class="fas fa-bullhorn mb-0"></h5> To make an entry in this column you have to submit declarations after first turn giving the desired category. The entry can not then be changed.</p>
-                                <p><button type="button" class="btn btn-outline-warning btn-sm">D</button> Declare category.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <HelpPartial />
     }
 </div>
 
@@ -165,12 +111,6 @@
 
     protected override void OnInitialized()
     {
-    }
-
-    private void NewGame(ModeType modeType)
-    {
-        Game = new Game(modeType);
-        Player = Game.Player;
     }
 
     private async Task RollDice()
@@ -204,6 +144,13 @@
         {
             await ScoreService.AddScoreAsync(Game);
         }
+    }
+
+    public async Task OnGameModeSelected(ModeType modeType)
+    {
+        await Task.CompletedTask;
+        Game = new Game(modeType);
+        Player = Game.Player;
     }
 
     public async Task OnCategoryDeclared(ICategory category)

@@ -19,7 +19,7 @@ namespace BlazorYahtzee.Models.Categories
 
         public bool CanBeClaimedInFull(Player player)
         {
-            return player.Dice.HasSmallStraight();
+            return player.HasForcedPlay || player.Dice.HasSmallStraight();
         }
 
         public int PointsFor(Player player)
