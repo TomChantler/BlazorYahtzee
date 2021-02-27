@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorYahtzee", "BlazorYahtzee\BlazorYahtzee.csproj", "{178ACD40-7D4A-401E-BCA3-1592243FFDFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_BlazorYahtzee", "_BlazorYahtzee\_BlazorYahtzee.csproj", "{178ACD40-7D4A-401E-BCA3-1592243FFDFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{834CB9C8-E552-4D02-955A-1F3265378188}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,6 +11,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Server", "BlazorYahtzee\Server\BlazorYahtzee.Server.csproj", "{2F9C5C99-5F27-44A6-8276-5728CD54F70D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Client", "BlazorYahtzee\Client\BlazorYahtzee.Client.csproj", "{02497E00-C92A-41A5-8D03-65C605CAE1C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Shared", "BlazorYahtzee\Shared\BlazorYahtzee.Shared.csproj", "{F218D1E3-8FDA-4021-AEFD-E27283B99925}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +28,18 @@ Global
 		{178ACD40-7D4A-401E-BCA3-1592243FFDFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{178ACD40-7D4A-401E-BCA3-1592243FFDFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{178ACD40-7D4A-401E-BCA3-1592243FFDFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F9C5C99-5F27-44A6-8276-5728CD54F70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9C5C99-5F27-44A6-8276-5728CD54F70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9C5C99-5F27-44A6-8276-5728CD54F70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9C5C99-5F27-44A6-8276-5728CD54F70D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02497E00-C92A-41A5-8D03-65C605CAE1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02497E00-C92A-41A5-8D03-65C605CAE1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02497E00-C92A-41A5-8D03-65C605CAE1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02497E00-C92A-41A5-8D03-65C605CAE1C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F218D1E3-8FDA-4021-AEFD-E27283B99925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F218D1E3-8FDA-4021-AEFD-E27283B99925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F218D1E3-8FDA-4021-AEFD-E27283B99925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F218D1E3-8FDA-4021-AEFD-E27283B99925}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
