@@ -11,13 +11,15 @@ namespace BlazorYahtzee.Models
         private readonly List<Play> _collection = new List<Play>();
 
         public ColumnType Type { get; }
+        public int NumberOfTurns { get; }
 
         private const int UpperSectionBonus = 35;
         private const int UpperSectionBonusThreshold = 63;
 
-        public Plays(ColumnType type)
+        public Plays(ColumnType type, int numberOfTurns)
         {
             Type = type;
+            NumberOfTurns = numberOfTurns;
         }
 
         public void Add(ICategory category, int points)
@@ -28,6 +30,11 @@ namespace BlazorYahtzee.Models
         public void Reset()
         {
             _collection.Clear();
+        }
+
+        public bool IsFilled()
+        {
+            return _collection.Count == NumberOfTurns;
         }
 
         public bool HasPlay(Type category)

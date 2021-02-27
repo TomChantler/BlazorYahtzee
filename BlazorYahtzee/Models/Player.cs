@@ -24,7 +24,7 @@ namespace BlazorYahtzee.Models
         {
             foreach (var columnType in mode.Columns.Select(x => x.Type))
             {
-                _plays.Add(new Plays(columnType));
+                _plays.Add(new Plays(columnType, mode.NumberOfTurns));
             }
 
             TotalRollsAllowed = mode.NumberOfRolls;

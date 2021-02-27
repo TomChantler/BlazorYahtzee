@@ -202,11 +202,13 @@ namespace BlazorYahtzee.Models
                 })
                 .OrderByDescending(x => x.Count)
                 .ThenByDescending(x => x.Value);
+            
+            var value = count == 2 
+                ? groups.OrderByDescending(x => x.Value).First().Value 
+                : groups.First().Value;
 
-            var mostCommonValue = groups.First().Value;
-
-            return _collection.Count(x => x.Value == mostCommonValue) >= count
-                ? _collection.Where(x => x.Value == mostCommonValue).Sum(x => x.Value)
+            return _collection.Count(x => x.Value == value) >= count
+                ? _collection.Where(x => x.Value == value).Sum(x => x.Value)
                 : 0;
         }
 
