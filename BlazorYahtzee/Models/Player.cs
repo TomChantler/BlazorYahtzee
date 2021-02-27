@@ -89,6 +89,11 @@ namespace BlazorYahtzee.Models
             ForcedPlayColumnType = columnType;
         }
 
+        public bool HasForcedDeclaration()
+        {
+            return _plays.Where(x => x.Type != ColumnType.Announce).All(x => x.IsFilled()) && !HasDeclaredCategory();
+        }
+
         public void ResetTurn()
         {
             Dice.Release();

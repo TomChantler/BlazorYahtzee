@@ -9,7 +9,6 @@ namespace BlazorYahtzee.Models.Modes
         ModeType Type { get; }
         IEnumerable<IColumn> Columns { get; }
         IEnumerable<ICategory> Categories { get; }
-        int NumberOfDice { get; }
         int NumberOfTurns { get; }
         int NumberOfRolls{ get; }
         string CategoryCssClassName { get; }

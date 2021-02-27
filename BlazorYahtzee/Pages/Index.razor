@@ -45,18 +45,35 @@
                     }
                     <div class="row mt-3 mb-4">
                         <div class="col">
-                            @if (!Game.Player.IsEndOfTurn() && !Game.IsOver())
+                            @if (!Game.IsOver())
                             {
-                                if (IsRolling)
+                                if (!Game.Player.IsEndOfTurn())
                                 {
-                                    <button class="btn btn-primary disabled">Roll</button>
+                                    if (IsRolling || Game.Player.IsFirstRoll() && Game.Player.HasForcedDeclaration())
+                                    {
+                                        <button class="btn btn-primary disabled">Roll</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
+                                    }
                                 }
                                 else
                                 {
-                                    <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
+                                    <button class="btn btn-primary disabled">Roll</button>
+                                    <div class="mt-4">
+                                        @if (Player.HasForcedPlay)
+                                        {
+                                            <span>A score must be marked after claiming a Yahtzee bonus.</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Please, mark a score.</span>
+                                        }
+                                    </div>
                                 }
                             }
-                            else if (Game.IsOver())
+                            else
                             {
                                 <div class="font-weight-bold">Game Over</div>
                                 <div>Final score: @Player.TotalScore()</div>
@@ -64,25 +81,11 @@
                                     <button class="btn btn-success" @onclick="@(() => Game = null)">New Game</button>
                                 </div>
                             }
-                            else
-                            {
-                                <button class="btn btn-primary disabled">Roll</button>
-                                <div class="mt-4">
-                                    @if (Player.HasForcedPlay)
-                                    {
-                                        <span>A score must be marked after claiming a Yahtzee bonus.</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Mark a score.</span>
-                                    }
-                                </div>
-                            }
                         </div>
                     </div>
                     <div class="mb-2 text-center">
                         <div>Rolls</div>
-                        <div class="font-weight-bold">@Game.CurrentRoll()/@Game.Mode.NumberOfDice</div>
+                        <div class="font-weight-bold">@Game.CurrentRoll()/@Game.Mode.NumberOfRolls</div>
                     </div>
                     <div class="mb-3 text-center">
                         <div>Turns</div>
