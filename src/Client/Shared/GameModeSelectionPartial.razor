@@ -1,0 +1,39 @@
+﻿@using BlazorYahtzee.Models.Modes
+
+<div class="col-sm-6">
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Yahtzee</h5>
+            <p class="card-text">
+                Standard Yahtzee game.
+                <ul>
+                    <li>Columns: 1 (Free)</li>
+                    <li>Categories: 13</li>
+                    <li>Turns: 13</li>
+                </ul>
+            </p>
+            <button class="btn btn-primary" @onclick="@(async () => await OnGameModeSelected.InvokeAsync(ModeType.Standard))">Yahtzee</button>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Yahtzee Plus</h5>
+            <p class="card-text">
+                Enhanced Yahtzee game.
+                <ul>
+                    <li>Columns: 4 (Down, Up, Free, Announce)</li>
+                    <li>Categories: 15</li>
+                    <li>Turns: 60</li>
+                </ul>
+            </p>
+            <button class="btn btn-primary" @onclick="@(async () => await OnGameModeSelected.InvokeAsync(ModeType.Plus))">Yahtzee Plus</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<ModeType> OnGameModeSelected { get; set; }
+}

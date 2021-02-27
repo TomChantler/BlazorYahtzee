@@ -1,0 +1,64 @@
+﻿@using BlazorYahtzee.Models
+
+<div class="row">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
+        Lower Section
+    </div>
+    @foreach (var column in Game.Mode.Columns)
+    {
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
+            @Game.Player.Plays(column.Type).ScoreForLowerSection()
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
+        Upper Section
+    </div>
+    @foreach (var column in Game.Mode.Columns)
+    {
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
+            @Game.Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
+        @ColumnTotalText()
+    </div>
+    @foreach (var column in Game.Mode.Columns)
+    {
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
+            @Game.Player.Plays(column.Type).TotalScore()
+        </div>
+    }
+</div>
+
+@if (ShowGrandTotalRow())
+{
+    <div class="row">
+        <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
+            Grand Total
+        </div>
+        <div class="col-8 p-1 font-weight-bold border text-right bg-light">
+            @Game.Player.TotalScore()
+        </div>
+    </div>
+}
+
+@code {
+    [CascadingParameter]
+    public Game Game { get; set; }
+
+    private string ColumnTotalText()
+    {
+        return Game.Mode.Columns.Count() > 1 ? "Column Total" : "Grand Total";
+    }
+
+    private bool ShowGrandTotalRow()
+    {
+        return Game.Mode.Columns.Count() > 1;
+    }
+}

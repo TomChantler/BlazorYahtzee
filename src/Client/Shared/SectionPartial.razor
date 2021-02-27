@@ -1,0 +1,109 @@
+﻿@using BlazorYahtzee.Models
+@using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Columns
+
+<div class="row">
+    <div class="@Game.Mode.CategoryCssClassName p-1 border">
+        @Category.Name
+    </div>
+    @foreach (var column in Game.Mode.Columns)
+    {
+        @if (Game.Player.Plays(column.Type).HasPlay(Category))
+        {
+            <div class="@Game.Mode.ColumnCssClassName p-1 border text-right bg-light">
+                @Game.Player.Plays(column.Type).ScoreFor(Category)
+            </div>
+        }
+        else
+        {
+            <div class="@Game.Mode.ColumnCssClassName p-1 border text-center">
+                @if (ShowClaimButton(column.Type))
+                {
+                    <button type="button" class="btn btn-primary btn-sm btn-block p-0" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Game.Player)</button>
+                }
+                @if (ShowScratchButton(column.Type))
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm btn-block p-0" @onclick="@(async () => await ClaimCategory(Category, column.Type))">@Category.PointsFor(Game.Player)</button>
+                }
+                @if (ShowDeclareButton(column.Type))
+                {
+                    <button type="button" class="btn btn-outline-warning btn-sm btn-block p-0" @onclick="@(async () => await DeclareCategory())">D</button>
+                }
+                @if (ShowClaimDeclaredButton(column.Type))
+                {
+                    <button type="button" class="btn btn-warning btn-sm btn-block p-0" @onclick="@(async () => await ClaimDeclaredCategory(Category))">@Category.PointsFor(Game.Player)</button>
+                }
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [CascadingParameter]
+    public Game Game { get; set; }
+
+    [Parameter]
+    public ICategory Category { get; set; }
+
+    [Parameter]
+    public bool IsRolling { get; set; }
+
+    [Parameter]
+    public EventCallback<ICategory> OnCategoryDeclared { get; set; }
+
+    [Parameter]
+    public EventCallback OnCategoryClaimed { get; set; }
+
+    private async Task DeclareCategory()
+    {
+        await OnCategoryDeclared.InvokeAsync(Category);
+    }
+
+    private async Task ClaimDeclaredCategory(ICategory category)
+    {
+        Game.Player.Plays(ColumnType.Announce).Add(category, category.PointsFor(Game.Player));
+        Game.Player.ClearDeclaredCategory();
+        await OnCategoryClaimed.InvokeAsync();
+    }
+
+    private async Task ClaimCategory(ICategory category, ColumnType column)
+    {
+        Game.Player.Plays(column).Add(category, category.PointsFor(Game.Player));
+        await OnCategoryClaimed.InvokeAsync();
+    }
+
+    private bool ShowDeclareButton(ColumnType columnType)
+    {
+        return columnType == ColumnType.Announce &&
+               !IsRolling &&
+               Game.Player.IsFirstRoll() &&
+               !Game.Player.HasDeclaredCategory();
+    }
+
+    private bool ShowClaimDeclaredButton(ColumnType columnType)
+    {
+        return columnType == ColumnType.Announce &&
+               Game.Player.HasDeclaredCategory() &&
+               Game.Player.DeclaredCategory == Category;
+    }
+
+    private bool ShowClaimButton(ColumnType columnType)
+    {
+        return (!Game.Player.IsStartOfTurn() && !Game.Player.HasForcedPlay || Game.Player.HasForcedPlay && Game.Player.ForcedPlayColumnType == columnType) &&
+               !IsRolling &&
+               columnType != ColumnType.Announce &&
+               !Game.Player.HasDeclaredCategory() &&
+               Category.CanBePlayed(Game.Player, columnType) &&
+               Category.CanBeClaimedInFull(Game.Player);
+    }
+
+    private bool ShowScratchButton(ColumnType columnType)
+    {
+        return (Game.Player.IsEndOfTurn() && !Game.Player.HasForcedPlay || Game.Player.HasForcedPlay && Game.Player.ForcedPlayColumnType == columnType) &&
+               !IsRolling &&
+               columnType != ColumnType.Announce &&
+               !Game.Player.HasDeclaredCategory() &&
+               Category.CanBePlayed(Game.Player, columnType) &&
+               !Category.CanBeClaimedInFull(Game.Player);
+    }
+}

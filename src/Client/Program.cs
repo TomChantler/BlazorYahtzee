@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BlazorYahtzee.Data;
+using BlazorYahtzee.Services;
 
 namespace BlazorYahtzee.Client
 {
@@ -25,6 +27,9 @@ namespace BlazorYahtzee.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorYahtzee.ServerAPI"));
 
             builder.Services.AddApiAuthorization();
+
+            builder.Services.AddScoped<IScoreService, ScoreService>();
+            builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 
             await builder.Build().RunAsync();
         }

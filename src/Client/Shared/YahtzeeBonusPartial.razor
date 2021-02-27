@@ -1,0 +1,62 @@
+﻿@using BlazorYahtzee.Models
+@using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Columns
+
+<div class="row">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
+        Yahtzee Bonus
+    </div>
+    @foreach (var column in Game.Mode.Columns)
+    {
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
+            @if (column.Type == ColumnType.Free)
+            {
+                @if (Game.Player.Plays(column.Type).HasMultipleYahtzeePlays())
+                {
+                    @Game.Player.Plays(column.Type).ScoreForYahtzeeBonus()
+                }
+                else
+                {
+                    <text>0</text>
+                }
+                @if (ShowYahtzeeBonusButton(column.Type))
+                {
+                    <button role="button" class="btn btn-danger btn-sm ml-2" @onclick="@(async () => await ClaimYahtzeeBonus(column.Type))">+ 100</button>
+                }
+            }
+            else
+            {
+                <text>-</text>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [CascadingParameter]
+    public Game Game { get; set; }
+
+    [Parameter]
+    public bool IsRolling { get; set; }
+
+    [Parameter]
+    public EventCallback OnYahtzeeBonusClaimed { get; set; }
+
+    private bool ShowYahtzeeBonusButton(ColumnType columnType)
+    {
+        return Game.Player.Dice.HasYahtzee() &&
+               !Game.Player.Plays(columnType).IsFilled() &&
+               Game.Player.Plays(columnType).HasYahtzeePlayForBonus() &&
+               !Game.Player.HasForcedPlay &&
+               !Game.Player.IsStartOfTurn() &&
+               !IsRolling;
+    }
+
+    private async Task ClaimYahtzeeBonus(ColumnType columnType)
+    {
+        var yahtzee = new Yahtzee();
+        Game.Player.Plays(columnType).Add(yahtzee, yahtzee.PointsFor(Game.Player));
+        Game.Player.ForcePlay(columnType);
+        await OnYahtzeeBonusClaimed.InvokeAsync();
+    }
+}

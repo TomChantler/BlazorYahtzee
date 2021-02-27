@@ -1,7 +1,188 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@using BlazorYahtzee.Models
+@using BlazorYahtzee.Models.Categories
+@using BlazorYahtzee.Models.Modes
+@using BlazorYahtzee.Services
 
-Welcome to your new app.
+@inject IScoreService ScoreService
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="container">
+    <div class="row">
+        @if (Game == null)
+        {
+            <GameModeSelectionPartial OnGameModeSelected="OnGameModeSelected" />
+        }
+        else
+        {
+            <CascadingValue Value="Game">
+                <div class="col-9">
+                    <HeaderFooterPartial />
+                    @foreach (var category in Game.UpperSectionCategories())
+                    {
+                        <SectionPartial Category="category"
+                                        IsRolling="IsRolling"
+                                        OnCategoryDeclared="OnCategoryDeclared"
+                                        OnCategoryClaimed="OnCategoryClaimed" />
+                    }
+                    <UpperSectionTotalPartial />
+                    @foreach (var category in Game.LowerSectionCategories())
+                    {
+                        <SectionPartial Category="category"
+                                        IsRolling="IsRolling"
+                                        OnCategoryDeclared="OnCategoryDeclared"
+                                        OnCategoryClaimed="OnCategoryClaimed" />
+                    }
+                    <YahtzeeBonusPartial IsRolling="IsRolling"
+                                         OnYahtzeeBonusClaimed="OnYahtzeeBonusClaimed" />
+                    <LowerSectionTotalPartial />
+                    <HeaderFooterPartial />
+                </div>
+                <div class="col-3 text-center">
+                    @foreach (var die in Player.Dice.Collection)
+                    {
+                        <DiePartial Die="die" />
+                    }
+                    <div class="row mt-3 mb-4">
+                        <div class="col">
+                            @if (!Game.IsOver())
+                            {
+                                if (!Game.Player.IsEndOfTurn())
+                                {
+                                    if (IsRolling || Game.Player.IsFirstRoll() && Game.Player.HasForcedDeclaration())
+                                    {
+                                        <button class="btn btn-primary disabled">Roll</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary" @onclick="@(() => RollDice())">Roll</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary disabled">Roll</button>
+                                    <div class="mt-4">
+                                        @if (Player.HasForcedPlay)
+                                        {
+                                            <span>A score must be marked after claiming a Yahtzee bonus.</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Please, mark a score.</span>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="font-weight-bold">Game Over</div>
+                                <div>Final score: @Player.TotalScore()</div>
+                                <div class="mt-2">
+                                    <button class="btn btn-success" @onclick="@(() => Game = null)">New Game</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="mb-2 text-center">
+                        <div>Rolls</div>
+                        <div class="font-weight-bold">@Game.CurrentRoll()/@Game.Mode.NumberOfRolls</div>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <div>Turns</div>
+                        <div class="font-weight-bold">@Game.CurrentTurn()/@Game.Mode.NumberOfTurns</div>
+                    </div>
+                    @if (!Game.IsOver())
+                    {
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#reset-modal">Reset</button>
+                    }
+                </div>
+            </CascadingValue>
+        }
+    </div>
+    @if (Game != null)
+    {
+        <HelpPartial />
+    }
+</div>
+
+<ConfirmModal Id="reset-modal"
+              CssClass="success"
+              Title="Reset"
+              Body="Are you sure you want to start a new game?"
+              Button="New Game"
+              OnClickCallback="@Reset" />
+
+@code
+{
+    public Game Game { get; set; }
+    private Player Player { get; set; }
+
+    private bool IsRolling { get; set; }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private async Task RollDice()
+    {
+        IsRolling = true;
+
+        Game.Player.RollDice();
+
+        var random = new Random();
+
+        foreach (var die in Player.Dice.NotHeldCollection)
+        {
+            await Task.Delay(200);
+            die.AssignValue(random.Next(1, 7));
+            StateHasChanged();
+        }
+
+        if (Game.Player.IsEndOfTurn())
+        {
+            Game.Player.HoldAllDice();
+        }
+
+        IsRolling = false;
+    }
+
+    private async Task NextTurn()
+    {
+        Game.NextTurn();
+
+        if (Game.IsOver())
+        {
+            await ScoreService.AddScoreAsync(Game);
+        }
+    }
+
+    protected async Task Reset(MouseEventArgs e)
+    {
+        await Task.CompletedTask;
+        Game = null;
+    }
+
+    public async Task OnGameModeSelected(ModeType modeType)
+    {
+        await Task.CompletedTask;
+        Game = new Game(modeType);
+        Player = Game.Player;
+    }
+
+    public async Task OnCategoryDeclared(ICategory category)
+    {
+        await Task.CompletedTask;
+        Game.Player.DeclareCategory(category);
+    }
+
+    public async Task OnCategoryClaimed()
+    {
+        await NextTurn();
+    }
+
+    public async Task OnYahtzeeBonusClaimed()
+    {
+        await Task.CompletedTask;
+        Game.Player.RemoveRemainingRolls();
+    }
+}
