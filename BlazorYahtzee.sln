@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Server", "BlazorYahtzee\Server\BlazorYahtzee.Server.csproj", "{2F9C5C99-5F27-44A6-8276-5728CD54F70D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Server", "src\Server\BlazorYahtzee.Server.csproj", "{2F9C5C99-5F27-44A6-8276-5728CD54F70D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Client", "BlazorYahtzee\Client\BlazorYahtzee.Client.csproj", "{02497E00-C92A-41A5-8D03-65C605CAE1C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Client", "src\Client\BlazorYahtzee.Client.csproj", "{02497E00-C92A-41A5-8D03-65C605CAE1C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Shared", "BlazorYahtzee\Shared\BlazorYahtzee.Shared.csproj", "{F218D1E3-8FDA-4021-AEFD-E27283B99925}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorYahtzee.Shared", "src\Shared\BlazorYahtzee.Shared.csproj", "{F218D1E3-8FDA-4021-AEFD-E27283B99925}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
