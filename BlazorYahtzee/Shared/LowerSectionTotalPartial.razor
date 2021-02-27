@@ -6,7 +6,7 @@
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
             @Game.Player.Plays(column.Type).ScoreForLowerSection()
         </div>
     }
@@ -18,7 +18,7 @@
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
             @Game.Player.Plays(column.Type).ScoreForUpperSectionWithBonus()
         </div>
     }
@@ -30,7 +30,7 @@
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
             @Game.Player.Plays(column.Type).TotalScore()
         </div>
     }

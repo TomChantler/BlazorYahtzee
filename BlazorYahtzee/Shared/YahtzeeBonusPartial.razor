@@ -3,12 +3,12 @@
 @using BlazorYahtzee.Models.Columns
 
 <div class="row">
-    <div class="@Game.Mode.CategoryCssClassName p-2 font-weight-bold text-right">
+    <div class="@Game.Mode.CategoryCssClassName p-1 font-weight-bold text-right">
         Yahtzee Bonus
     </div>
     @foreach (var column in Game.Mode.Columns)
     {
-        <div class="@Game.Mode.ColumnCssClassName p-2 font-weight-bold border text-right">
+        <div class="@Game.Mode.ColumnCssClassName p-1 font-weight-bold border text-right bg-light">
             @if (Game.Player.Plays(column.Type).HasMultipleYahtzeePlays())
             {
                 @Game.Player.Plays(column.Type).ScoreForYahtzeeBonus()

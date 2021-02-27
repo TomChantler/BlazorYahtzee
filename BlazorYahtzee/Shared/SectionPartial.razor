@@ -10,7 +10,7 @@
     {
         @if (Game.Player.Plays(column.Type).HasPlay(Category))
         {
-            <div class="@Game.Mode.ColumnCssClassName p-1 border text-right">
+            <div class="@Game.Mode.ColumnCssClassName p-1 border text-right bg-light">
                 @Game.Player.Plays(column.Type).ScoreFor(Category)
             </div>
         }
