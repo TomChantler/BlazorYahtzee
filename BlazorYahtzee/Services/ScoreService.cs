@@ -23,7 +23,9 @@ namespace BlazorYahtzee.Services
             var scores = data.ToList();
             scores.Add(new Score(game.Player.TotalScore()));
 
-            await _localStorageService.AddScoresAsync(game.Mode.Type, scores);
+            var scoresToSave = scores.OrderByDescending(x => x.Points).Take(50);
+
+            await _localStorageService.AddScoresAsync(game.Mode.Type, scoresToSave);
         }
 
         public async Task<IEnumerable<Score>> GetScoresAsync(ModeType modeType)
