@@ -90,7 +90,7 @@
                     </div>
                     @if (!Game.IsOver())
                     {
-                        <button class="btn btn-success btn-sm" @onclick="@(() => Game = null)">Reset</button>
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#reset-modal">Reset</button>
                     }
                 </div>
             </CascadingValue>
@@ -101,6 +101,13 @@
         <HelpPartial />
     }
 </div>
+
+<ConfirmModal Id="reset-modal"
+              CssClass="success"
+              Title="Reset"
+              Body="Are you sure you want to start a new game?"
+              Button="New Game"
+              OnClickCallback="@Reset" />
 
 @code
 {
@@ -144,6 +151,12 @@
         {
             await ScoreService.AddScoreAsync(Game);
         }
+    }
+
+    protected async Task Reset(MouseEventArgs e)
+    {
+        await Task.CompletedTask;
+        Game = null;
     }
 
     public async Task OnGameModeSelected(ModeType modeType)
