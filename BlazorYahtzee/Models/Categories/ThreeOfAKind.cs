@@ -24,7 +24,7 @@ namespace BlazorYahtzee.Models.Categories
 
         public int PointsFor(Player player)
         {
-            return player.Dice.SumOfAKind(3);
+            return player.Dice.SumOfAll();
         }
     }
 }
